@@ -3,126 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SocialTrends - Seu Assistente de Crescimento</title>
+  <title>SocialTrends | Inteligência de Conteúdo</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
+  <!-- Menu Lateral Profissional -->
   <aside class="sidebar">
-    <div class="logo">🚀 SocialTrends</div>
-    <button class="nav-item active" data-tab="inicio">🏠 Início</button>
-    <button class="nav-item" data-tab="alta">🔥 O que está em alta?</button>
-    <button class="nav-item" data-tab="horarios">⏰ Quando publicar?</button>
-    <button class="nav-item" data-tab="ideias">💡 Ideias de conteúdo</button>
-    <button class="nav-item" data-tab="desempenho">📊 Meu desempenho</button>
-    <button class="nav-item" data-tab="planejamento">📅 Meu planejamento</button>
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#7C3AED"/>
+        <path d="M2 17L12 22L22 17" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12L12 17L22 12" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      SocialTrends
+    </div>
+    
+    <nav class="nav-menu">
+      <button class="nav-item active" data-tab="inicio">Início</button>
+      <button class="nav-item" data-tab="alta">Tendências</button>
+      <button class="nav-item" data-tab="horarios">Horários Ideais</button>
+      <button class="nav-item" data-tab="ideias">Ideias de Conteúdo</button>
+      <button class="nav-item" data-tab="desempenho">Meu Desempenho</button>
+      <button class="nav-item" data-tab="planejamento">Planejamento</button>
+    </nav>
   </aside>
 
+  <!-- Área Principal Centralizada -->
   <main class="main-content">
     
     <div class="demo-banner">
-      ⚠️ <strong>Modo de Demonstração:</strong> As informações abaixo são exemplos visuais para testar a plataforma. Conecte suas APIs para ver seus dados reais.
+      <span class="banner-icon">i</span>
+      <span><strong>Ambiente de Demonstração:</strong> Conecte suas APIs para visualizar dados reais do seu perfil.</span>
     </div>
 
-    <!-- ABA: INÍCIO -->
-    <section id="tab-inicio">
-      <div class="header">
-        <h1>Olá, criador! 👋</h1>
-        <p>Aqui está o resumo do seu dia para você crescer no Instagram.</p>
-      </div>
+    <!-- TELA: INÍCIO -->
+    <section id="tab-inicio" class="tab-content">
+      <header class="page-header">
+        <h1>Visão Geral</h1>
+        <p>Acompanhe as principais oportunidades para o seu crescimento hoje.</p>
+      </header>
 
-      <div class="opportunity-box">
-        <h2>Sua grande oportunidade de hoje</h2>
-        <p>O formato "Carrossel com dicas rápidas" está gerando 3x mais salvamentos hoje. Que tal criar um sobre o seu nicho?</p>
+      <div class="highlight-card">
+        <div class="highlight-content">
+          <h2>Oportunidade em Destaque</h2>
+          <p>O formato "Carrossel com dicas rápidas" está gerando 3x mais salvamentos. Que tal criar um sobre o seu nicho hoje?</p>
+        </div>
       </div>
 
       <div class="grid">
         <div class="card">
-          <div class="badge badge-success">Melhor Horário Hoje</div>
+          <div class="card-header">
+            <span class="badge badge-success">Melhor Horário Hoje</span>
+          </div>
           <h3 class="card-title">18:00 - 19:30</h3>
           <p class="card-text">Este horário apresenta bom desempenho para seu público. É quando eles costumam relaxar e rolar o feed.</p>
         </div>
         <div class="card">
-          <div class="badge badge-instagram">Sugestão de Formato</div>
+          <div class="card-header">
+            <span class="badge badge-purple">Sugestão de Formato</span>
+          </div>
           <h3 class="card-title">Reels Curto</h3>
           <p class="card-text">Vídeos de até 15 segundos estão com alta taxa de retenção. Aposte em ganchos rápidos nos primeiros 3 segundos.</p>
         </div>
       </div>
     </section>
 
-    <!-- ABA: EM ALTA -->
-    <section id="tab-alta" class="hidden">
-      <div class="header">
-        <h1>🔥 O que está em alta</h1>
-        <p>Descubra tendências e assuntos populares agora.</p>
-      </div>
+    <!-- TELA: TENDÊNCIAS -->
+    <section id="tab-alta" class="tab-content hidden">
+      <header class="page-header">
+        <h1>Tendências</h1>
+        <p>Descubra assuntos e formatos populares agora.</p>
+      </header>
       <div class="grid" id="trending-grid">
         <p class="loading">Buscando tendências...</p>
       </div>
     </section>
 
-    <!-- ABA: HORÁRIOS -->
-    <section id="tab-horarios" class="hidden">
-      <div class="header">
-        <h1>⏰ Quando publicar?</h1>
+    <!-- TELA: HORÁRIOS -->
+    <section id="tab-horarios" class="tab-content hidden">
+      <header class="page-header">
+        <h1>Horários Ideais</h1>
         <p>Os melhores momentos para o seu conteúdo ser visto.</p>
-      </div>
-      <div class="card" style="max-width: 500px;">
-        <label>Escolha o formato:</label>
+      </header>
+      <div class="form-card">
+        <label>Selecione o formato:</label>
         <select id="time-format">
           <option value="reels">Reels</option>
           <option value="posts">Carrossel / Fotos</option>
           <option value="stories">Stories</option>
         </select>
-        <button class="btn-primary" id="btn-load-times">Ver Recomendações</button>
+        <button class="btn-primary" id="btn-load-times">Analisar Horários</button>
       </div>
-      <div class="grid" id="times-grid" style="margin-top: 24px;"></div>
+      <div class="grid" id="times-grid"></div>
     </section>
 
-    <!-- ABA: IDEIAS -->
-    <section id="tab-ideias" class="hidden">
-      <div class="header">
-        <h1>💡 Ideias de Conteúdo</h1>
-        <p>Não sabe o que postar? Inspires-se nessas ideias baseadas em tendências.</p>
-      </div>
+    <!-- TELA: IDEIAS -->
+    <section id="tab-ideias" class="tab-content hidden">
+      <header class="page-header">
+        <h1>Ideias de Conteúdo</h1>
+        <p>Inspire-se com sugestões baseadas em tendências.</p>
+      </header>
       <div class="grid">
         <div class="card">
-          <div class="badge badge-warning">Dica para Iniciantes</div>
+          <div class="card-header">
+            <span class="badge badge-warning">Dica para Iniciantes</span>
+          </div>
           <h3 class="card-title">Desmistifique o seu processo</h3>
           <p class="card-text">Mostre os bastidores do que você faz. Conteúdos "POV" ou "Rotina" criam muita conexão e identificação com o público.</p>
         </div>
         <div class="card">
-          <div class="badge badge-instagram">Sugestão de Pauta</div>
+          <div class="card-header">
+            <span class="badge badge-purple">Sugestão de Pauta</span>
+          </div>
           <h3 class="card-title">3 erros que você comete</h3>
           <p class="card-text">Listas curtas (3 a 5 itens) geram ótimos salvamentos. Ex: "3 erros que todo iniciante comete na cozinha/academia/programação".</p>
         </div>
       </div>
     </section>
 
-    <!-- ABA: DESEMPENHO -->
-    <section id="tab-desempenho" class="hidden">
-      <div class="header">
-        <h1>📊 Meu Desempenho</h1>
+    <!-- TELA: DESEMPENHO -->
+    <section id="tab-desempenho" class="tab-content hidden">
+      <header class="page-header">
+        <h1>Meu Desempenho</h1>
         <p>Análise simplificada do seu perfil.</p>
-      </div>
-      <div class="card" style="max-width: 500px;">
-        <label>Digite seu @ no Instagram:</label>
+      </header>
+      <div class="form-card">
+        <label>Nome de usuário no Instagram:</label>
         <input type="text" id="analyze-user" placeholder="@seu_perfil" />
-        <button class="btn-primary" id="btn-analyze">Analisar Meu Perfil</button>
+        <button class="btn-primary" id="btn-analyze">Gerar Análise</button>
       </div>
       <div id="analyze-result" style="margin-top: 24px;"></div>
     </section>
 
-    <!-- ABA: PLANEJAMENTO -->
-    <section id="tab-planejamento" class="hidden">
-      <div class="header">
-        <h1>📅 Meu Planejamento</h1>
+    <!-- TELA: PLANEJAMENTO -->
+    <section id="tab-planejamento" class="tab-content hidden">
+      <header class="page-header">
+        <h1>Planejamento</h1>
         <p>Organize sua semana de forma simples.</p>
-      </div>
+      </header>
       <div class="empty-state">
-        <h3>Em breve: Seu Calendário Editorial</h3>
-        <p>Aqui você poderá agendar seus posts e receber alertas dos melhores horários.</p>
+        <h3>Seu Calendário Editorial</h3>
+        <p>Em breve você poderá agendar seus posts e receber alertas dos melhores horários.</p>
       </div>
     </section>
 
