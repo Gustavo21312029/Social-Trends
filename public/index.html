@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocialTrends</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0f1117; color: #e6e6e6; padding: 24px; }
+    h1 { font-size: 1.6rem; margin-bottom: 4px; }
+    .sub { color: #8b8b9a; font-size: .9rem; margin-bottom: 24px; }
+    nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    button.tab { background: #1c1f2a; color: #cfcfdc; border: 1px solid #2a2f3d;
+      padding: 8px 16px; border-radius: 8px; cursor: pointer; }
+    button.tab.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+    .platforms { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .platforms button { background: transparent; border: 1px solid #2a2f3d;
+      color: #cfcfdc; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: .85rem; }
+    .platforms button.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .card { background: #1c1f2a; border: 1px solid #2a2f3d; border-radius: 12px; padding: 16px; }
+    .card h3 { font-size: 1rem; margin-bottom: 8px; }
+    .card .meta { color: #8b8b9a; font-size: .8rem; display: flex; gap: 10px; flex-wrap: wrap; }
+    .grow { color: #22c55e; font-weight: 600; }
+    .heatmap { display: grid; grid-template-columns: 60px repeat(6, 1fr); gap: 4px; max-width: 720px; }
+    .heatmap div { padding: 8px 4px; border-radius: 4px; text-align: center; font-size: .75rem; }
+    .heatmap .label { color: #8b8b9a; text-align: left; padding-left: 0; }
+    .hidden { display: none; }
+    .loading { color: #8b8b9a; font-style: italic; }
+    input, select { background: #1c1f2a; border: 1px solid #2a2f3d; color: #e6e6e6;
+      padding: 8px 12px; border-radius: 8px; }
+    .row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <h1>🔎 SocialTrends</h1>
+  <p class="sub">Análise de conteúdo em alta, horários ideais e performance.</p>
+
+  <nav>
+    <button class="tab active" data-tab="trending">Em alta</button>
+    <button class="tab" data-tab="times">Melhores horários</button>
+    <button class="tab" data-tab="analyze">Analisar perfil</button>
+  </nav>
+
+  <section id="tab-trending">
+    <div class="platforms">
+      <button class="active" data-platform="all">Todas</button>
+      <button data-platform="tiktok">TikTok</button>
+      <button data-platform="instagram">Instagram</button>
+      <button data-platform="x">X</button>
+      <button data-platform="facebook">Facebook</button>
+    </div>
+    <div class="grid" id="trending-grid"><p class="loading">Carregando…</p></div>
+  </section>
+
+  <section id="tab-times" class="hidden">
+    <div class="row">
+      <select id="times-platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="x">X</option>
+        <option value="facebook">Facebook</option>
+      </select>
+      <select id="times-format">
+        <option value="reels">Reels</option>
+        <option value="posts">Posts</option>
+        <option value="stories">Stories</option>
+      </select>
+      <button class="tab" id="load-heatmap">Atualizar</button>
+    </div>
+    <div class="heatmap" id="heatmap"></div>
+  </section>
+
+  <section id="tab-analyze" class="hidden">
+    <div class="row">
+      <input id="analyze-user" placeholder="@usuario" />
+      <select id="analyze-platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="x">X</option>
+        <option value="facebook">Facebook</option>
+      </select>
+      <button class="tab" id="run-analyze">Analisar</button>
+    </div>
+    <pre id="analyze-out" class="card" style="white-space:pre-wrap;"></pre>
+  </section>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+
+    document.querySelectorAll('.tab[data-tab]').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.tab[data-tab]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        ['trending','times','analyze'].forEach(t =>
+          $('#tab-' + t).classList.toggle('hidden', t !== btn.dataset.tab));
+        if (btn.dataset.tab === 'times') loadHeatmap();
+      };
+    });
+
+    document.querySelectorAll('.platforms button').forEach(b => {
+      b.onclick = () => {
+        document.querySelectorAll('.platforms button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        loadTrending(b.dataset.platform);
+      };
+    });
+
+    async function loadTrending(platform = 'all') {
+      const grid = $('#trending-grid');
+      grid.innerHTML = '<p class="loading">Carregando…</p>';
+      try {
+        const r = await fetch(`/api/trending?platform=${platform}`);
+        const data = await r.json();
+        if (!data.items?.length) { grid.innerHTML = '<p class="loading">Sem dados.</p>'; return; }
+        grid.innerHTML = data.items.map(it => `
+          <article class="card">
+            <h3>${it.titulo}</h3>
+            <div class="meta">
+              ${it.views ? `<span>👁 ${it.views.toLocaleString('pt-BR')}</span>` : ''}
+              ${it.likes ? `<span>❤ ${it.likes.toLocaleString('pt-BR')}</span>` : ''}
+              ${it.saves ? `<span>🔖 ${it.saves.toLocaleString('pt-BR')}</span>` : ''}
+              ${it.compartilhamentos ? `<span>↗ ${it.compartilhamentos.toLocaleString('pt-BR')}</span>` : ''}
+              <span class="grow">${it.crescimento}</span>
+            </div>
+          </article>`).join('');
+      } catch (e) {
+        grid.innerHTML = `<p class="loading">Erro: ${e.message}</p>`;
+      }
+    }
+
+    async function loadHeatmap() {
+      const platform = $('#times-platform').value;
+      const format = $('#times-format').value;
+      const box = $('#heatmap');
+      box.innerHTML = '<p class="loading">Carregando…</p>';
+      try {
+        const r = await fetch(`/api/best-times?platform=${platform}&format=${format}`);
+        const { heatmap } = await r.json();
+        if (!heatmap?.length) { box.innerHTML = '<p class="loading">Sem dados.</p>'; return; }
+        const horas = [...new Set(heatmap.map(h => h.hora))].sort((a,b)=>a-b);
+        const dias = [...new Set(heatmap.map(h => h.dia))];
+        let html = `<div class="label"></div>` + horas.map(h => `<div class="label">${h}h</div>`).join('');
+        dias.forEach(d => {
+          html += `<div class="label">${d}</div>`;
+          horas.forEach(h => {
+            const cell = heatmap.find(x => x.dia === d && x.hora === h);
+            const s = cell?.score ?? 0;
+            html += `<div style="background:rgba(99,102,241,${(s/100).toFixed(2)});">${s}</div>`;
+          });
+        });
+        box.innerHTML = html;
+      } catch (e) {
+        box.innerHTML = `<p class="loading">Erro: ${e.message}</p>`;
+      }
+    }
+
+    $('#load-heatmap').onclick = loadHeatmap;
+
+    $('#run-analyze').onclick = async () => {
+      const user = $('#analyze-user').value.trim();
+      const platform = $('#analyze-platform').value;
+      if (!user) return;
+      $('#analyze-out').textContent = 'Analisando…';
+      const r = await fetch(`/api/analyze?username=${encodeURIComponent(user)}&platform=${platform}`);
+      $('#analyze-out').textContent = JSON.stringify(await r.json(), null, 2);
+    };
+
+    loadTrending();
+  </script>
+</body>
+</html>
