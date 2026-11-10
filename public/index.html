@@ -3,170 +3,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SocialTrends</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; background: #0f1117; color: #e6e6e6; padding: 24px; }
-    h1 { font-size: 1.6rem; margin-bottom: 4px; }
-    .sub { color: #8b8b9a; font-size: .9rem; margin-bottom: 24px; }
-    nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    button.tab { background: #1c1f2a; color: #cfcfdc; border: 1px solid #2a2f3d;
-      padding: 8px 16px; border-radius: 8px; cursor: pointer; }
-    button.tab.active { background: #6366f1; color: #fff; border-color: #6366f1; }
-    .platforms { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .platforms button { background: transparent; border: 1px solid #2a2f3d;
-      color: #cfcfdc; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: .85rem; }
-    .platforms button.active { background: #6366f1; border-color: #6366f1; color: #fff; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-    .card { background: #1c1f2a; border: 1px solid #2a2f3d; border-radius: 12px; padding: 16px; }
-    .card h3 { font-size: 1rem; margin-bottom: 8px; }
-    .card .meta { color: #8b8b9a; font-size: .8rem; display: flex; gap: 10px; flex-wrap: wrap; }
-    .grow { color: #22c55e; font-weight: 600; }
-    .heatmap { display: grid; grid-template-columns: 60px repeat(6, 1fr); gap: 4px; max-width: 720px; }
-    .heatmap div { padding: 8px 4px; border-radius: 4px; text-align: center; font-size: .75rem; }
-    .heatmap .label { color: #8b8b9a; text-align: left; padding-left: 0; }
-    .hidden { display: none; }
-    .loading { color: #8b8b9a; font-style: italic; }
-    input, select { background: #1c1f2a; border: 1px solid #2a2f3d; color: #e6e6e6;
-      padding: 8px 12px; border-radius: 8px; }
-    .row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  </style>
+  <title>SocialTrends - Seu Assistente de Crescimento</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>🔎 SocialTrends</h1>
-  <p class="sub">Análise de conteúdo em alta, horários ideais e performance.</p>
 
-  <nav>
-    <button class="tab active" data-tab="trending">Em alta</button>
-    <button class="tab" data-tab="times">Melhores horários</button>
-    <button class="tab" data-tab="analyze">Analisar perfil</button>
-  </nav>
+  <aside class="sidebar">
+    <div class="logo">🚀 SocialTrends</div>
+    <button class="nav-item active" data-tab="inicio">🏠 Início</button>
+    <button class="nav-item" data-tab="alta">🔥 O que está em alta?</button>
+    <button class="nav-item" data-tab="horarios">⏰ Quando publicar?</button>
+    <button class="nav-item" data-tab="ideias">💡 Ideias de conteúdo</button>
+    <button class="nav-item" data-tab="desempenho">📊 Meu desempenho</button>
+    <button class="nav-item" data-tab="planejamento">📅 Meu planejamento</button>
+  </aside>
 
-  <section id="tab-trending">
-    <div class="platforms">
-      <button class="active" data-platform="all">Todas</button>
-      <button data-platform="tiktok">TikTok</button>
-      <button data-platform="instagram">Instagram</button>
-      <button data-platform="x">X</button>
-      <button data-platform="facebook">Facebook</button>
+  <main class="main-content">
+    
+    <div class="demo-banner">
+      ⚠️ <strong>Modo de Demonstração:</strong> As informações abaixo são exemplos visuais para testar a plataforma. Conecte suas APIs para ver seus dados reais.
     </div>
-    <div class="grid" id="trending-grid"><p class="loading">Carregando…</p></div>
-  </section>
 
-  <section id="tab-times" class="hidden">
-    <div class="row">
-      <select id="times-platform">
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-        <option value="x">X</option>
-        <option value="facebook">Facebook</option>
-      </select>
-      <select id="times-format">
-        <option value="reels">Reels</option>
-        <option value="posts">Posts</option>
-        <option value="stories">Stories</option>
-      </select>
-      <button class="tab" id="load-heatmap">Atualizar</button>
-    </div>
-    <div class="heatmap" id="heatmap"></div>
-  </section>
+    <!-- ABA: INÍCIO -->
+    <section id="tab-inicio">
+      <div class="header">
+        <h1>Olá, criador! 👋</h1>
+        <p>Aqui está o resumo do seu dia para você crescer no Instagram.</p>
+      </div>
 
-  <section id="tab-analyze" class="hidden">
-    <div class="row">
-      <input id="analyze-user" placeholder="@usuario" />
-      <select id="analyze-platform">
-        <option value="instagram">Instagram</option>
-        <option value="tiktok">TikTok</option>
-        <option value="x">X</option>
-        <option value="facebook">Facebook</option>
-      </select>
-      <button class="tab" id="run-analyze">Analisar</button>
-    </div>
-    <pre id="analyze-out" class="card" style="white-space:pre-wrap;"></pre>
-  </section>
+      <div class="opportunity-box">
+        <h2>Sua grande oportunidade de hoje</h2>
+        <p>O formato "Carrossel com dicas rápidas" está gerando 3x mais salvamentos hoje. Que tal criar um sobre o seu nicho?</p>
+      </div>
 
-  <script>
-    const $ = (s) => document.querySelector(s);
+      <div class="grid">
+        <div class="card">
+          <div class="badge badge-success">Melhor Horário Hoje</div>
+          <h3 class="card-title">18:00 - 19:30</h3>
+          <p class="card-text">Este horário apresenta bom desempenho para seu público. É quando eles costumam relaxar e rolar o feed.</p>
+        </div>
+        <div class="card">
+          <div class="badge badge-instagram">Sugestão de Formato</div>
+          <h3 class="card-title">Reels Curto</h3>
+          <p class="card-text">Vídeos de até 15 segundos estão com alta taxa de retenção. Aposte em ganchos rápidos nos primeiros 3 segundos.</p>
+        </div>
+      </div>
+    </section>
 
-    document.querySelectorAll('.tab[data-tab]').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.tab[data-tab]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        ['trending','times','analyze'].forEach(t =>
-          $('#tab-' + t).classList.toggle('hidden', t !== btn.dataset.tab));
-        if (btn.dataset.tab === 'times') loadHeatmap();
-      };
-    });
+    <!-- ABA: EM ALTA -->
+    <section id="tab-alta" class="hidden">
+      <div class="header">
+        <h1>🔥 O que está em alta</h1>
+        <p>Descubra tendências e assuntos populares agora.</p>
+      </div>
+      <div class="grid" id="trending-grid">
+        <p class="loading">Buscando tendências...</p>
+      </div>
+    </section>
 
-    document.querySelectorAll('.platforms button').forEach(b => {
-      b.onclick = () => {
-        document.querySelectorAll('.platforms button').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        loadTrending(b.dataset.platform);
-      };
-    });
+    <!-- ABA: HORÁRIOS -->
+    <section id="tab-horarios" class="hidden">
+      <div class="header">
+        <h1>⏰ Quando publicar?</h1>
+        <p>Os melhores momentos para o seu conteúdo ser visto.</p>
+      </div>
+      <div class="card" style="max-width: 500px;">
+        <label>Escolha o formato:</label>
+        <select id="time-format">
+          <option value="reels">Reels</option>
+          <option value="posts">Carrossel / Fotos</option>
+          <option value="stories">Stories</option>
+        </select>
+        <button class="btn-primary" id="btn-load-times">Ver Recomendações</button>
+      </div>
+      <div class="grid" id="times-grid" style="margin-top: 24px;"></div>
+    </section>
 
-    async function loadTrending(platform = 'all') {
-      const grid = $('#trending-grid');
-      grid.innerHTML = '<p class="loading">Carregando…</p>';
-      try {
-        const r = await fetch(`/api/trending?platform=${platform}`);
-        const data = await r.json();
-        if (!data.items?.length) { grid.innerHTML = '<p class="loading">Sem dados.</p>'; return; }
-        grid.innerHTML = data.items.map(it => `
-          <article class="card">
-            <h3>${it.titulo}</h3>
-            <div class="meta">
-              ${it.views ? `<span>👁 ${it.views.toLocaleString('pt-BR')}</span>` : ''}
-              ${it.likes ? `<span>❤ ${it.likes.toLocaleString('pt-BR')}</span>` : ''}
-              ${it.saves ? `<span>🔖 ${it.saves.toLocaleString('pt-BR')}</span>` : ''}
-              ${it.compartilhamentos ? `<span>↗ ${it.compartilhamentos.toLocaleString('pt-BR')}</span>` : ''}
-              <span class="grow">${it.crescimento}</span>
-            </div>
-          </article>`).join('');
-      } catch (e) {
-        grid.innerHTML = `<p class="loading">Erro: ${e.message}</p>`;
-      }
-    }
+    <!-- ABA: IDEIAS -->
+    <section id="tab-ideias" class="hidden">
+      <div class="header">
+        <h1>💡 Ideias de Conteúdo</h1>
+        <p>Não sabe o que postar? Inspires-se nessas ideias baseadas em tendências.</p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="badge badge-warning">Dica para Iniciantes</div>
+          <h3 class="card-title">Desmistifique o seu processo</h3>
+          <p class="card-text">Mostre os bastidores do que você faz. Conteúdos "POV" ou "Rotina" criam muita conexão e identificação com o público.</p>
+        </div>
+        <div class="card">
+          <div class="badge badge-instagram">Sugestão de Pauta</div>
+          <h3 class="card-title">3 erros que você comete</h3>
+          <p class="card-text">Listas curtas (3 a 5 itens) geram ótimos salvamentos. Ex: "3 erros que todo iniciante comete na cozinha/academia/programação".</p>
+        </div>
+      </div>
+    </section>
 
-    async function loadHeatmap() {
-      const platform = $('#times-platform').value;
-      const format = $('#times-format').value;
-      const box = $('#heatmap');
-      box.innerHTML = '<p class="loading">Carregando…</p>';
-      try {
-        const r = await fetch(`/api/best-times?platform=${platform}&format=${format}`);
-        const { heatmap } = await r.json();
-        if (!heatmap?.length) { box.innerHTML = '<p class="loading">Sem dados.</p>'; return; }
-        const horas = [...new Set(heatmap.map(h => h.hora))].sort((a,b)=>a-b);
-        const dias = [...new Set(heatmap.map(h => h.dia))];
-        let html = `<div class="label"></div>` + horas.map(h => `<div class="label">${h}h</div>`).join('');
-        dias.forEach(d => {
-          html += `<div class="label">${d}</div>`;
-          horas.forEach(h => {
-            const cell = heatmap.find(x => x.dia === d && x.hora === h);
-            const s = cell?.score ?? 0;
-            html += `<div style="background:rgba(99,102,241,${(s/100).toFixed(2)});">${s}</div>`;
-          });
-        });
-        box.innerHTML = html;
-      } catch (e) {
-        box.innerHTML = `<p class="loading">Erro: ${e.message}</p>`;
-      }
-    }
+    <!-- ABA: DESEMPENHO -->
+    <section id="tab-desempenho" class="hidden">
+      <div class="header">
+        <h1>📊 Meu Desempenho</h1>
+        <p>Análise simplificada do seu perfil.</p>
+      </div>
+      <div class="card" style="max-width: 500px;">
+        <label>Digite seu @ no Instagram:</label>
+        <input type="text" id="analyze-user" placeholder="@seu_perfil" />
+        <button class="btn-primary" id="btn-analyze">Analisar Meu Perfil</button>
+      </div>
+      <div id="analyze-result" style="margin-top: 24px;"></div>
+    </section>
 
-    $('#load-heatmap').onclick = loadHeatmap;
+    <!-- ABA: PLANEJAMENTO -->
+    <section id="tab-planejamento" class="hidden">
+      <div class="header">
+        <h1>📅 Meu Planejamento</h1>
+        <p>Organize sua semana de forma simples.</p>
+      </div>
+      <div class="empty-state">
+        <h3>Em breve: Seu Calendário Editorial</h3>
+        <p>Aqui você poderá agendar seus posts e receber alertas dos melhores horários.</p>
+      </div>
+    </section>
 
-    $('#run-analyze').onclick = async () => {
-      const user = $('#analyze-user').value.trim();
-      const platform = $('#analyze-platform').value;
-      if (!user) return;
-      $('#analyze-out').textContent = 'Analisando…';
-      const r = await fetch(`/api/analyze?username=${encodeURIComponent(user)}&platform=${platform}`);
-      $('#analyze-out').textContent = JSON.stringify(await r.json(), null, 2);
-    };
+  </main>
 
-    loadTrending();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
