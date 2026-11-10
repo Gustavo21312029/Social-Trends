@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 import httpx
 import os
-import time
 import asyncio
 
 app = FastAPI(title="SocialTrends API", version="0.5.0")
@@ -20,7 +19,6 @@ TIKTOK_ACTOR = "clockworks~tiktok-scraper"
 INSTAGRAM_ACTOR = os.getenv("INSTAGRAM_ACTOR_ID", "apify~instagram-scraper")
 
 # --- CONFIGURAÇÃO DE NICHOS E HASHTAGS ---
-# Você pode expandir esta lista com quantos nichos desejar.
 NICHOS = {
     "tecnologia": {
         "label": "Tecnologia & Programação",
@@ -94,7 +92,6 @@ async def trending(
     platform: str = Query("all", pattern="^(all|tiktok|instagram|x|facebook)$"),
     nicho: str = Query("tecnologia", description="Nicho para filtrar as tendências")
 ):
-    # Se o nicho não existir, usa 'tecnologia' como padrão
     nicho_config = NICHOS.get(nicho, NICHOS["tecnologia"])
     hashtags = nicho_config["hashtags"]
     mock_fallback = MOCK_TRENDS.get(nicho, DEFAULT_MOCK)
@@ -110,7 +107,6 @@ async def trending(
 
     # 1. TikTok
     if platform in ("all", "tiktok"):
-        # Passamos a lista de hashtags do nicho selecionado
         tiktok_data = await fetch_from_apify(
             TIKTOK_ACTOR,
             {"hashtags": hashtags, "resultsPerPage": 5, "shouldDownloadVideos": False}
@@ -144,3 +140,24 @@ async def trending(
         elif platform == "instagram": results.extend(mock_fallback)
 
     return {"platform": platform, "nicho": nicho, "updated_at": datetime.utcnow().isoformat(), "items": results}
+
+# --- ROTA DE HORÁRIOS (MANTIDA MOCK POR ENQUANTO) ---
+@app.get("/best-times")
+@app.get("/api/best-times")
+def best_times(platform: str = Query("instagram"), format: str = Query("reels")):
+    dias = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+    horas = [6, 9, 12, 15, 18, 21]
+    heatmap = [{"dia": d, "hora": h, "score": (i * 7 + j * 11) % 60 + 40}
+               for i, d in enumerate(dias) for j, h in enumerate(horas)]
+    return {"platform": platform, "format": format, "heatmap": heatmap}
+
+# --- ROTA DE ANÁLISE (MANTIDA MOCK POR ENQUANTO) ---
+@app.get("/analyze")
+@app.get("/api/analyze")
+def analyze(username: str = Query(...), platform: str = Query("instagram")):
+    return {
+        "username": username, "platform": platform,
+        "status": "mock", "message": "Análise real requer Meta Graph API.",
+        "suggested_times": ["Qua 12:00", "Qui 09:00", "Sex 18:00"],
+        "suggested_formats": ["Reels", "Carrossel"],
+    }
