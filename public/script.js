@@ -11,18 +11,11 @@ const tabs = {
 
 navItems.forEach(btn => {
   btn.addEventListener('click', () => {
-    // Remove active de todos
     navItems.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    
-    // Esconde todas as abas
     Object.values(tabs).forEach(tab => tab.classList.add('hidden'));
-    
-    // Mostra a aba clicada
     const target = btn.dataset.tab;
     tabs[target].classList.remove('hidden');
-
-    // Ações ao entrar em abas específicas
     if (target === 'alta') loadTrending();
     if (target === 'horarios') loadBestTimes();
   });
@@ -38,26 +31,34 @@ async function loadTrending() {
     const data = await res.json();
     
     if (!data.items || data.items.length === 0) {
-      grid.innerHTML = '<div class="empty-state">Nenhuma tendência encontrada no momento.</div>';
+      grid.innerHTML = '<div class="empty-state"><h3>Nenhuma tendência encontrada</h3><p>Tente novamente mais tarde.</p></div>';
       return;
     }
 
-    // AQUI ESTÁ A CORREÇÃO: Agora usamos item.platform em vez de adivinhar pelo ID
-    grid.innerHTML = data.items.map(item => `
-      <div class="card">
-        <span class="badge ${item.platform === 'tiktok' ? 'badge-tiktok' : 'badge-instagram'}">
-          ${item.platform === 'tiktok' ? 'TikTok' : 'Instagram'}
-        </span>
-        <h3 class="card-title">${item.titulo}</h3>
-        <p class="card-text">
-          ${item.views ? `🔥 ${(item.views/1000).toFixed(0)}k visualizações` : ''}
-          ${item.likes ? `❤️ ${(item.likes/1000).toFixed(0)}k curtidas` : ''}
-        </p>
-        <span class="badge badge-success">${item.crescimento} de crescimento</span>
-      </div>
-    `).join('');
+    grid.innerHTML = data.items.map(item => {
+      let badgeClass = 'badge-instagram';
+      let platformName = 'Instagram';
+      if (item.platform === 'tiktok') { badgeClass = 'badge-tiktok'; platformName = 'TikTok'; }
+      else if (item.platform === 'x') { badgeClass = 'badge-x'; platformName = 'X (Twitter)'; }
+
+      return `
+        <div class="card">
+          <div class="card-header">
+            <span class="badge ${badgeClass}">${platformName}</span>
+          </div>
+          <h3 class="card-title">${item.titulo}</h3>
+          <p class="card-text">
+            ${item.views ? `Visualizações: ${(item.views/1000).toFixed(0)}k` : ''}
+            ${item.likes ? ` • Curtidas: ${(item.likes/1000).toFixed(0)}k` : ''}
+          </p>
+          <div style="margin-top: 16px;">
+            <span class="badge badge-success">${item.crescimento}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
   } catch (err) {
-    grid.innerHTML = '<div class="empty-state">Erro ao carregar tendências. Tente novamente mais tarde.</div>';
+    grid.innerHTML = '<div class="empty-state"><h3>Erro de conexão</h3><p>Não foi possível carregar as tendências agora.</p></div>';
   }
 }
 
@@ -74,29 +75,30 @@ async function loadBestTimes() {
     const data = await res.json();
 
     if (!data.heatmap || data.heatmap.length === 0) {
-      grid.innerHTML = '<div class="empty-state">Ainda não temos dados suficientes para o seu perfil. Continue postando!</div>';
+      grid.innerHTML = '<div class="empty-state"><h3>Dados insuficientes</h3><p>Continue postando para gerar análise.</p></div>';
       return;
     }
 
-    // Filtra os 3 melhores horários e traduz a linguagem
     const topTimes = data.heatmap.sort((a, b) => b.score - a.score).slice(0, 3);
     
     grid.innerHTML = topTimes.map((time, index) => {
-      let mensagem = "Bom momento para publicar.";
-      let badgeClass = "badge-instagram";
+      let mensagem = "Alternativa válida para testar.";
+      let badgeClass = "badge-purple";
+      let badgeText = "Recomendado";
       
       if (index === 0) {
         mensagem = "Excelente oportunidade! Seu público está muito ativo neste horário.";
         badgeClass = "badge-success";
+        badgeText = "Melhor Horário";
       } else if (index === 1) {
         mensagem = "Ótimo horário. Você terá boa visibilidade.";
-      } else {
-        mensagem = "Alternativa válida para testar.";
       }
 
       return `
         <div class="card">
-          <span class="badge ${badgeClass}">${index === 0 ? '🌟 Melhor Horário' : '👍 Recomendado'}</span>
+          <div class="card-header">
+            <span class="badge ${badgeClass}">${badgeText}</span>
+          </div>
           <h3 class="card-title">${time.dia} às ${time.hora}h</h3>
           <p class="card-text">${mensagem}</p>
         </div>
@@ -104,7 +106,7 @@ async function loadBestTimes() {
     }).join('');
 
   } catch (err) {
-    grid.innerHTML = '<div class="empty-state">Erro ao buscar horários.</div>';
+    grid.innerHTML = '<div class="empty-state"><h3>Erro ao buscar</h3><p>Tente novamente.</p></div>';
   }
 }
 
@@ -114,7 +116,7 @@ document.getElementById('btn-analyze').addEventListener('click', async () => {
   const resultBox = document.getElementById('analyze-result');
   
   if (!user) {
-    resultBox.innerHTML = '<div class="empty-state">Por favor, digite seu nome de usuário.</div>';
+    resultBox.innerHTML = '<div class="empty-state"><h3>Atenção</h3><p>Por favor, digite seu nome de usuário.</p></div>';
     return;
   }
 
@@ -129,18 +131,18 @@ document.getElementById('btn-analyze').addEventListener('click', async () => {
         <div class="card">
           <h3 class="card-title">Resumo do Perfil @${data.username}</h3>
           <p class="card-text">${data.message}</p>
-          <div style="margin-top: 16px;">
-            <strong>Melhores horários sugeridos:</strong><br>
-            ${data.suggested_times.map(t => `<span class="badge badge-success">${t}</span>`).join(' ')}
+          <div style="margin-top: 24px;">
+            <strong style="display:block; margin-bottom:8px;">Horários sugeridos:</strong>
+            ${data.suggested_times.map(t => `<span class="badge badge-success" style="margin-right:4px;">${t}</span>`).join(' ')}
           </div>
           <div style="margin-top: 16px;">
-            <strong>Formatos recomendados:</strong><br>
-            ${data.suggested_formats.map(f => `<span class="badge badge-instagram">${f}</span>`).join(' ')}
+            <strong style="display:block; margin-bottom:8px;">Formatos recomendados:</strong>
+            ${data.suggested_formats.map(f => `<span class="badge badge-purple" style="margin-right:4px;">${f}</span>`).join(' ')}
           </div>
         </div>
       </div>
     `;
   } catch (err) {
-    resultBox.innerHTML = '<div class="empty-state">Erro ao analisar o perfil. Verifique o nome e tente novamente.</div>';
+    resultBox.innerHTML = '<div class="empty-state"><h3>Erro</h3><p>Erro ao analisar o perfil.</p></div>';
   }
 });
