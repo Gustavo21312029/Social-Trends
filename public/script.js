@@ -42,10 +42,11 @@ async function loadTrending() {
       return;
     }
 
+    // AQUI ESTÁ A CORREÇÃO: Agora usamos item.platform em vez de adivinhar pelo ID
     grid.innerHTML = data.items.map(item => `
       <div class="card">
-        <span class="badge ${item.id.includes('tk') ? 'badge-tiktok' : 'badge-instagram'}">
-          ${item.id.includes('tk') ? 'TikTok' : 'Instagram'}
+        <span class="badge ${item.platform === 'tiktok' ? 'badge-tiktok' : 'badge-instagram'}">
+          ${item.platform === 'tiktok' ? 'TikTok' : 'Instagram'}
         </span>
         <h3 class="card-title">${item.titulo}</h3>
         <p class="card-text">
