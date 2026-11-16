@@ -1,175 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SocialTrends | Inteligência de Conteúdo</title>
-  <!-- Caminhos relativos para garantir que o Vercel encontre o CSS e JS -->
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-
-  <!-- Menu Lateral Profissional -->
-  <aside class="sidebar">
-    <div class="logo">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#7C3AED"/>
-        <path d="M2 17L12 22L22 17" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 12L12 17L22 12" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      SocialTrends
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#7855e7" />
+    <meta
+      name="description"
+      content="Explore tendências, descubra conteúdos por nicho e encontre sua próxima ideia nas principais redes sociais."
+    />
+    <title>Social Trends — Sua próxima ideia começa aqui</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <a href="#" class="brand" aria-label="Social Trends início"
+        ><span class="brand-mark"
+          ><svg viewBox="0 0 24 24">
+            <path d="m5 16 5-5 4 3 5-8M13 6h6v6" /></svg></span
+        ><span
+          >social<span class="brand-light">trends</span
+          ><span class="brand-dot">.</span></span
+        ></a
+      >
+      <div class="workspace">
+        <span class="workspace-avatar">ST</span>
+        <div>Meu workspace<small>Espaço pessoal</small></div>
+        <span class="workspace-check">✓</span>
+      </div>
+      <div class="nav-label">DESCOBRIR</div>
+      <nav aria-label="Navegação principal">
+        <button class="nav-item active" data-view="trends">
+          <i data-icon="compass"></i>Explorar tendências<span
+            class="nav-live"
+          ></span>
+        </button>
+        <button class="nav-item" data-view="saved">
+          <i data-icon="bookmark"></i>Conteúdos salvos<span class="saved-count"
+            >0</span
+          >
+        </button>
+        <button class="nav-item" data-view="ideas">
+          <i data-icon="bulb"></i>Ideias de conteúdo
+        </button>
+        <div class="nav-label tools-label">CRIAR E PLANEJAR</div>
+        <button class="nav-item" data-view="times">
+          <i data-icon="clock"></i>Melhores horários
+        </button>
+        <button class="nav-item" data-view="planner">
+          <i data-icon="calendar"></i>Meu planejamento
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <span class="tip-spark">✧</span
+          ><strong>Uma boa ideia muda tudo.</strong>
+          <p>Salve suas referências e transforme tendências em conteúdo.</p>
+          <button data-view="saved">Ver minha coleção <span>↗</span></button>
+        </div>
+        <button class="help-button" id="help">
+          <i data-icon="help"></i> Como funciona <span>↗</span>
+        </button>
+        <div class="profile">
+          <span class="profile-avatar">VC</span>
+          <div>Seu espaço criativo<small>Vamos criar algo incrível</small></div>
+          <span class="profile-dot"></span>
+        </div>
+      </div>
+    </aside>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="breadcrumb">
+          <button
+            id="menu-toggle"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+          >
+            <i data-icon="menu"></i></button
+          ><span>Workspace</span><span class="breadcrumb-slash">/</span
+          ><strong id="breadcrumb-current">Explorar tendências</strong>
+        </div>
+        <div class="topbar-right">
+          <span class="demo-indicator"><span></span> Modo demonstração</span
+          ><button
+            class="avatar-button"
+            aria-label="Sobre este workspace"
+            id="about-workspace"
+          >
+            VC
+          </button>
+        </div>
+      </header>
+      <main id="main">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">SEU RADAR DE CONTEÚDO</div>
+            <h1 id="page-title">O próximo assunto começa aqui<span>.</span></h1>
+            <p id="page-description">
+              Descubra o que está em alta e transforme tendências em grandes
+              ideias.
+            </p>
+          </div>
+          <button class="primary-button" id="inspiration">
+            <i data-icon="sparkles"></i> Me inspire <span>↗</span>
+          </button>
+        </div>
+        <div id="explore-section">
+          <section class="hero-banner" aria-label="Destaque">
+            <div class="hero-copy">
+              <span class="hero-badge"
+                ><span></span> CONECTE-SE AO QUE IMPORTA</span
+              >
+              <h2>Menos rolagem.<br />Mais inspiração.</h2>
+              <p>
+                As principais redes, os melhores conteúdos<br
+                  class="desktop-br"
+                />
+                e o seu nicho. Tudo em um só lugar.
+              </p>
+              <button id="explore-now">
+                Encontre sua próxima ideia <span>↗</span>
+              </button>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="orbit orbit-one"></div>
+              <div class="orbit orbit-two"></div>
+              <div class="orbit orbit-three"></div>
+              <span class="art-star star-one">✦</span
+              ><span class="art-star star-two">✧</span
+              ><span
+                class="floating-platform float-instagram"
+                data-social="instagram"
+              ></span
+              ><span
+                class="floating-platform float-tiktok"
+                data-social="tiktok"
+              ></span
+              ><span
+                class="floating-platform float-youtube"
+                data-social="youtube"
+              ></span
+              ><span class="floating-platform float-x" data-social="x"></span
+              ><span
+                class="floating-platform float-facebook"
+                data-social="facebook"
+              ></span>
+              <div class="trend-float">
+                <span>↗</span>
+                <div>
+                  Encontre sua oportunidade<small
+                    >Uma tendência. Infinitas possibilidades.</small
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="platform-section" aria-label="Escolher rede social">
+            <div class="section-line">
+              <h2>Onde você quer se inspirar?</h2>
+              <span>5 redes. Infinitas ideias.</span>
+            </div>
+            <div
+              class="platform-tabs"
+              role="tablist"
+              aria-label="Plataformas"
+              id="platform-tabs"
+            ></div>
+          </section>
+          <section class="discovery" aria-labelledby="discovery-title">
+            <div class="section-line discovery-heading">
+              <div>
+                <h2 id="discovery-title">
+                  Em alta agora
+                  <span class="live-label"><span></span> EXPLORE</span>
+                </h2>
+                <p id="results-subtitle">
+                  Uma seleção para despertar suas próximas ideias.
+                </p>
+              </div>
+              <label class="period-select"
+                ><i data-icon="calendar"></i
+                ><select id="period" aria-label="Período">
+                  <option value="7">Últimos 7 dias</option>
+                  <option value="1">Últimas 24 horas</option>
+                  <option value="30">Últimos 30 dias</option></select
+                ><i data-icon="chevron"></i
+              ></label>
+            </div>
+            <div class="filter-bar">
+              <label class="search-field"
+                ><i data-icon="search"></i
+                ><input
+                  id="search"
+                  type="search"
+                  placeholder="Buscar assuntos, criadores ou hashtags..."
+                  aria-label="Buscar conteúdos"
+                /><kbd>/</kbd></label
+              ><label class="select-field niche-select"
+                ><i data-icon="sliders"></i
+                ><select id="niche" aria-label="Filtrar por nicho"></select
+                ><i data-icon="chevron"></i></label
+              ><label class="select-field sort-select"
+                ><i data-icon="sort"></i
+                ><select id="sort" aria-label="Ordenar resultados">
+                  <option value="views">Mais visualizados</option>
+                  <option value="likes">Mais curtidos</option>
+                  <option value="growth">Maior crescimento</option></select
+                ><i data-icon="chevron"></i
+              ></label>
+            </div>
+            <div
+              class="niche-chips"
+              id="niche-chips"
+              aria-label="Nichos rápidos"
+            ></div>
+            <div class="results-line">
+              <span id="result-count" role="status" aria-live="polite"></span
+              ><span class="sample-label"
+                ><i data-icon="info"></i> Dados de exemplo • métricas
+                ilustrativas</span
+              >
+            </div>
+            <div
+              id="content-grid"
+              class="content-grid"
+              aria-live="polite"
+            ></div>
+            <div class="load-more-wrap">
+              <button class="secondary-button" id="load-more">
+                Explorar mais conteúdos <i data-icon="arrow-down"></i>
+              </button>
+            </div>
+          </section>
+        </div>
+        <section id="secondary-section" hidden></section>
+        <footer>
+          <span class="footer-brand">socialtrends<span>.</span></span>
+          <p>Inspiração para criar. Inteligência para crescer.</p>
+          <span>Feito para quem cria <span class="footer-star">✧</span></span>
+        </footer>
+      </main>
     </div>
-    
-    <nav class="nav-menu">
-      <button class="nav-item active" data-tab="inicio">Início</button>
-      <button class="nav-item" data-tab="alta">Tendências</button>
-      <button class="nav-item" data-tab="horarios">Horários Ideais</button>
-      <button class="nav-item" data-tab="ideias">Ideias de Conteúdo</button>
-      <button class="nav-item" data-tab="desempenho">Meu Desempenho</button>
-      <button class="nav-item" data-tab="planejamento">Planejamento</button>
-    </nav>
-  </aside>
-
-  <!-- Área Principal Centralizada -->
-  <main class="main-content">
-    
-    <div class="demo-banner">
-      <span class="banner-icon">i</span>
-      <span><strong>Ambiente de Demonstração:</strong> Conecte suas APIs para visualizar dados reais do seu perfil.</span>
-    </div>
-
-    <!-- TELA: INÍCIO -->
-    <section id="tab-inicio" class="tab-content">
-      <header class="page-header">
-        <h1>Visão Geral</h1>
-        <p>Acompanhe as principais oportunidades para o seu crescimento hoje.</p>
-      </header>
-
-      <div class="highlight-card">
-        <div class="highlight-content">
-          <h2>Oportunidade em Destaque</h2>
-          <p>O formato "Carrossel com dicas rápidas" está gerando 3x mais salvamentos. Que tal criar um sobre o seu nicho hoje?</p>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <div class="card-header">
-            <span class="badge badge-success">Melhor Horário Hoje</span>
-          </div>
-          <h3 class="card-title">18:00 - 19:30</h3>
-          <p class="card-text">Este horário apresenta bom desempenho para seu público. É quando eles costumam relaxar e rolar o feed.</p>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="badge badge-purple">Sugestão de Formato</span>
-          </div>
-          <h3 class="card-title">Reels Curto</h3>
-          <p class="card-text">Vídeos de até 15 segundos estão com alta taxa de retenção. Aposte em ganchos rápidos nos primeiros 3 segundos.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TELA: TENDÊNCIAS -->
-    <section id="tab-alta" class="tab-content hidden">
-      <header class="page-header">
-        <h1>Tendências</h1>
-        <p>Descubra assuntos e formatos populares agora.</p>
-      </header>
-      
-      <!-- SELETOR DE NICHO -->
-      <div class="form-card" style="margin-bottom: 24px;">
-        <label for="nicho-select">Filtrar por Nicho:</label>
-               <select id="nicho-select">
-          <option value="tecnologia">Tecnologia & Programação</option>
-          <option value="fitness">Fitness & Saúde</option>
-          <option value="culinaria">Culinária & Gastronomia</option>
-          <option value="marketing">Marketing & Negócios</option>
-          <option value="viagem">Viagem & Turismo</option>
-          <option value="moda">Moda & Beleza</option>
-          <option value="games">Games & E-sports</option>
-          <option value="esportes">Esportes</option>
-          <option value="filmes">Filmes & Séries</option>
-          <option value="musica">Música & Entretenimento</option>
-        </select>
-      </div>
-
-      <div class="grid" id="trending-grid">
-        <p class="loading">Buscando tendências...</p>
-      </div>
-    </section>
-
-    <!-- TELA: HORÁRIOS -->
-    <section id="tab-horarios" class="tab-content hidden">
-      <header class="page-header">
-        <h1>Horários Ideais</h1>
-        <p>Os melhores momentos para o seu conteúdo ser visto.</p>
-      </header>
-      <div class="form-card">
-        <label>Selecione o formato:</label>
-        <select id="time-format">
-          <option value="reels">Reels</option>
-          <option value="posts">Carrossel / Fotos</option>
-          <option value="stories">Stories</option>
-        </select>
-        <button class="btn-primary" id="btn-load-times">Analisar Horários</button>
-      </div>
-      <div class="grid" id="times-grid"></div>
-    </section>
-
-    <!-- TELA: IDEIAS -->
-    <section id="tab-ideias" class="tab-content hidden">
-      <header class="page-header">
-        <h1>Ideias de Conteúdo</h1>
-        <p>Inspire-se com sugestões baseadas em tendências.</p>
-      </header>
-      <div class="grid">
-        <div class="card">
-          <div class="card-header">
-            <span class="badge badge-warning">Dica para Iniciantes</span>
-          </div>
-          <h3 class="card-title">Desmistifique o seu processo</h3>
-          <p class="card-text">Mostre os bastidores do que você faz. Conteúdos "POV" ou "Rotina" criam muita conexão e identificação com o público.</p>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <span class="badge badge-purple">Sugestão de Pauta</span>
-          </div>
-          <h3 class="card-title">3 erros que você comete</h3>
-          <p class="card-text">Listas curtas (3 a 5 itens) geram ótimos salvamentos. Ex: "3 erros que todo iniciante comete na cozinha/academia/programação".</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TELA: DESEMPENHO -->
-    <section id="tab-desempenho" class="tab-content hidden">
-      <header class="page-header">
-        <h1>Meu Desempenho</h1>
-        <p>Análise simplificada do seu perfil.</p>
-      </header>
-      <div class="form-card">
-        <label>Nome de usuário no Instagram:</label>
-        <input type="text" id="analyze-user" placeholder="@seu_perfil" />
-        <button class="btn-primary" id="btn-analyze">Gerar Análise</button>
-      </div>
-      <div id="analyze-result" style="margin-top: 24px;"></div>
-    </section>
-
-    <!-- TELA: PLANEJAMENTO -->
-    <section id="tab-planejamento" class="tab-content hidden">
-      <header class="page-header">
-        <h1>Planejamento</h1>
-        <p>Organize sua semana de forma simples.</p>
-      </header>
-      <div class="empty-state">
-        <h3>Seu Calendário Editorial</h3>
-        <p>Em breve você poderá agendar seus posts e receber alertas dos melhores horários.</p>
-      </div>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
-</body>
+    <dialog id="detail-dialog">
+      <button class="close-dialog" aria-label="Fechar">
+        <i data-icon="close"></i>
+      </button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
 </html>

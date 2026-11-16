@@ -1,165 +1,164 @@
-from fastapi import FastAPI, Query
-from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime
-import httpx
-import os
+"""Social Trends: amostras por hashtag com fallback explicitamente demonstrativo."""
 import asyncio
+import json
+import os
+import time
+from datetime import datetime, timezone
+from pathlib import Path
 
-app = FastAPI(title="SocialTrends API", version="0.6.0")
+import httpx
+from fastapi import FastAPI, Query
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-APIFY_TOKEN = os.getenv("APIFY_TOKEN")
-TIKTOK_ACTOR = "clockworks~tiktok-scraper"
-INSTAGRAM_ACTOR = os.getenv("INSTAGRAM_ACTOR_ID", "apify~instagram-scraper")
-
-# --- CONFIGURAÇÃO DE NICHOS E HASHTAGS ---
+app = FastAPI(title="Social Trends API", version="1.0.0")
+PLATFORMS = {"all", "tiktok", "instagram", "x", "youtube", "facebook"}
 NICHOS = {
-    "tecnologia": {"hashtags": ["programacao", "devlife", "tecnologia", "python"]},
-    "fitness": {"hashtags": ["fitness", "gym", "workout", "saude", "treino"]},
-    "culinaria": {"hashtags": ["receita", "culinaria", "gastronomia", "comidacaseira"]},
-    "marketing": {"hashtags": ["marketingdigital", "empreendedorismo", "negocios"]},
-    "viagem": {"hashtags": ["viagem", "turismo", "mochilao", "destinos"]},
-    "moda": {"hashtags": ["moda", "beleza", "estilo", "maquiagem"]},
-    "games": {"hashtags": ["games", "gamer", "esports", "twitch", "gameplay"]},
-    "esportes": {"hashtags": ["esportes", "futebol", "basquete", "treino", "skate"]},
-    "filmes": {"hashtags": ["filmes", "series", "cinema", "netflix", "streaming"]},
-    "musica": {"hashtags": ["musica", "show", "festival", "cantor", "podcast"]}
+    "tecnologia": ["tecnologia", "programacao", "inteligenciaartificial"],
+    "fitness": ["fitness", "treino", "saude"],
+    "culinaria": ["receita", "culinaria", "gastronomia"],
+    "marketing": ["marketingdigital", "empreendedorismo", "negocios"],
+    "viagem": ["viagem", "turismo", "destinos"],
+    "moda": ["moda", "beleza", "estilo"],
+    "games": ["games", "gamer", "gameplay"],
+    "esportes": ["esportes", "futebol", "basquete"],
+    "filmes": ["filmes", "series", "cinema"],
+    "musica": ["musica", "show", "festival"],
 }
+DEMO_PATH = Path(__file__).resolve().parent.parent / "public" / "demo-data.json"
+DEMO_ITEMS = json.loads(DEMO_PATH.read_text(encoding="utf-8"))["items"]
+CACHE = {}
 
-# --- DADOS DE DEMONSTRAÇÃO SUPER COMPLETOS (PLANO B) ---
-# Isso garante que o site fique sempre cheio e bonito, mesmo se o Apify demorar
-MOCK_TRENDS = {
-    "tecnologia": [
-        {"id": "1", "platform": "tiktok", "titulo": "3 erros que todo dev júnior comete", "views": 870000, "likes": 62000, "crescimento": "+210%"},
-        {"id": "2", "platform": "instagram", "titulo": "Carrossel: 5 atalhos do VS Code", "views": 45000, "likes": 12400, "crescimento": "+180%"},
-        {"id": "3", "platform": "tiktok", "titulo": "Como a IA está mudando a programação", "views": 1500000, "likes": 150000, "crescimento": "+350%"}
-    ],
-    "fitness": [
-        {"id": "4", "platform": "tiktok", "titulo": "Treino de 5 minutos para iniciantes", "views": 1200000, "likes": 85000, "crescimento": "+340%"},
-        {"id": "5", "platform": "instagram", "titulo": "Reel: rotina de treino em casa", "views": 80000, "likes": 24000, "crescimento": "+290%"},
-        {"id": "6", "platform": "tiktok", "titulo": "O que comer antes do treino?", "views": 950000, "likes": 72000, "crescimento": "+150%"}
-    ],
-    "games": [
-        {"id": "7", "platform": "tiktok", "titulo": "Gameplay insana de GTA 6", "views": 5000000, "likes": 400000, "crescimento": "+500%"},
-        {"id": "8", "platform": "instagram", "titulo": "Setup gamer dos sonhos", "views": 120000, "likes": 35000, "crescimento": "+120%"},
-        {"id": "9", "platform": "tiktok", "titulo": "Dicas para subir de elo no Valorant", "views": 2300000, "likes": 180000, "crescimento": "+220%"}
-    ],
-    "esportes": [
-        {"id": "10", "platform": "instagram", "titulo": "Melhores momentos do jogo de ontem", "views": 300000, "likes": 45000, "crescimento": "+200%"},
-        {"id": "11", "platform": "tiktok", "titulo": "Treino de explosão para futebol", "views": 800000, "likes": 60000, "crescimento": "+180%"}
-    ]
-}
-DEFAULT_MOCK = MOCK_TRENDS["tecnologia"] # Fallback geral
 
-# --- FUNÇÃO AUXILIAR PARA CHAMAR O APIFY ---
-async def fetch_from_apify(actor_id: str, input_data: dict, limit: int = 5):
-    if not APIFY_TOKEN:
-        return None
+def demo_items(platform, nicho, days):
+    return [item for item in DEMO_ITEMS
+            if (platform == "all" or item["platform"] == platform)
+            and (nicho == "all" or item["nicho"] == nicho)
+            and item["age_days"] < days]
+
+
+async def fetch_from_apify(actor_id, input_data):
+    """One bounded synchronous Actor request. Credentials never enter responses."""
+    token = os.getenv("APIFY_TOKEN")
+    if not token:
+        return []
     try:
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(
-                f"https://api.apify.com/v2/acts/{actor_id}/runs?token={APIFY_TOKEN}",
-                json=input_data, timeout=8.0
+        async with httpx.AsyncClient(timeout=9.0) as client:
+            response = await client.post(
+                f"https://api.apify.com/v2/acts/{actor_id}/run-sync-get-dataset-items",
+                headers={"Authorization": f"Bearer {token}"},
+                params={"timeout": 7, "format": "json"},
+                json=input_data,
             )
-            run_id = resp.json().get("data", {}).get("id")
-            if not run_id: return None
-            
-            # Timeout curto (4s) para não estourar o Vercel de 10s
-            for _ in range(4):
-                status_resp = await client.get(f"https://api.apify.com/v2/actor-runs/{run_id}?token={APIFY_TOKEN}")
-                status_data = status_resp.json().get("data", {})
-                if status_data.get("status") == "SUCCEEDED":
-                    dataset_id = status_data.get("defaultDatasetId")
-                    items_resp = await client.get(f"https://api.apify.com/v2/datasets/{dataset_id}/items?token={APIFY_TOKEN}")
-                    return items_resp.json()[:limit]
-                await asyncio.sleep(1)
-            return None
-    except Exception:
+            response.raise_for_status()
+            data = response.json()
+            return data if isinstance(data, list) else []
+    except (httpx.HTTPError, ValueError):
+        return []
+
+
+def nonnegative_number(value):
+    try:
+        return max(0, int(value or 0))
+    except (TypeError, ValueError, OverflowError):
+        return 0
+
+
+def published_age(value):
+    try:
+        if isinstance(value, (int, float)):
+            published = datetime.fromtimestamp(value, tz=timezone.utc)
+        else:
+            published = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            if published.tzinfo is None:
+                published = published.replace(tzinfo=timezone.utc)
+        return max(0, (datetime.now(timezone.utc) - published).total_seconds() / 86400)
+    except (TypeError, ValueError, OverflowError, OSError):
         return None
 
-# --- ROTA DE TENDÊNCIAS ---
+
+async def live_platform(platform, nicho, days):
+    tags = NICHOS[nicho]
+    if platform == "tiktok":
+        actor = os.getenv("TIKTOK_ACTOR_ID", "clockworks~tiktok-scraper")
+        payload = {"hashtags": tags, "resultsPerPage": 15, "shouldDownloadVideos": False}
+    else:
+        actor = os.getenv("INSTAGRAM_ACTOR_ID", "apify~instagram-scraper")
+        payload = {"directUrls": [f"https://www.instagram.com/explore/tags/{tag}/" for tag in tags],
+                   "resultsType": "posts", "resultsLimit": 15}
+    raw = await fetch_from_apify(actor, payload)
+    output = []
+    for index, item in enumerate(raw):
+        if not isinstance(item, dict):
+            continue
+        age = published_age(item.get("createTime") if platform == "tiktok" else item.get("timestamp"))
+        # Without a date, the publication cannot substantiate the selected period.
+        if age is None or age >= days:
+            continue
+        title = item.get("text") or item.get("desc") or item.get("caption") or "Publicação sobre #" + tags[0]
+        if isinstance(title, dict):
+            title = title.get("text", "Publicação")
+        author = item.get("authorMeta") or {}
+        if not isinstance(author, dict):
+            author = {}
+        views = item.get("playCount") if platform == "tiktok" else item.get("videoViewCount", item.get("videoPlayCount"))
+        url = item.get("webVideoUrl") if platform == "tiktok" else item.get("url")
+        output.append({
+            "id": platform + "-" + str(item.get("id", index)), "platform": platform,
+            "nicho": nicho, "titulo": str(title)[:160], "description": str(title)[:1000],
+            "views": nonnegative_number(views) if views is not None else None,
+            "likes": nonnegative_number(item.get("diggCount") if platform == "tiktok" else item.get("likesCount")),
+            "creator": "@" + str(author.get("name") or item.get("ownerUsername") or "criador").lstrip("@"),
+            "format": "Vídeo curto" if platform == "tiktok" else "Publicação",
+            "image": "assets/" + nicho + ".jpg", "image_alt": "Imagem ilustrativa do nicho",
+            "url": url, "age_days": age, "source": "live",
+        })
+    return output
+
+
 @app.get("/trending")
 @app.get("/api/trending")
 async def trending(
-    platform: str = Query("all", pattern="^(all|tiktok|instagram|x|facebook)$"),
-    nicho: str = Query("tecnologia")
+    platform: str = Query("all", pattern="^(all|tiktok|instagram|x|youtube|facebook)$"),
+    nicho: str = Query("all", pattern="^(all|tecnologia|fitness|culinaria|marketing|viagem|moda|games|esportes|filmes|musica)$"),
+    days: int = Query(7, ge=1, le=30),
 ):
-    nicho_config = NICHOS.get(nicho, NICHOS["tecnologia"])
-    hashtags = nicho_config["hashtags"]
-    mock_fallback = MOCK_TRENDS.get(nicho, DEFAULT_MOCK)
+    key = (platform, nicho, days)
+    cached = CACHE.get(key)
+    if cached and time.monotonic() - cached[0] < 900:
+        return cached[1]
+    # A specific niche is required for meaningful hashtag collection. Unsupported
+    # platforms and the aggregate niche use the explicitly labeled demo catalog.
+    can_collect = os.getenv("APIFY_TOKEN") and nicho != "all" and platform in {"all", "tiktok", "instagram"}
+    items = []
+    if can_collect:
+        selected = ["tiktok", "instagram"] if platform == "all" else [platform]
+        batches = await asyncio.gather(*(live_platform(p, nicho, days) for p in selected))
+        items = [item for batch in batches for item in batch]
+    source = "live" if items else "demo"
+    if not items:
+        items = demo_items(platform, nicho, days)
+    # Deduplicate collected posts before ranking the available sample.
+    items = list({item["id"]: item for item in items}.values())
+    result = {"platform": platform, "nicho": nicho, "days": days, "source": source,
+              "scope": "hashtag_sample" if source == "live" else "illustrative_examples",
+              "updated_at": datetime.now(timezone.utc).isoformat(),
+              "items": sorted(items, key=lambda x: x["views"] or 0, reverse=True)}
+    CACHE[key] = (time.monotonic(), result)
+    return result
 
-    # Se não tiver token, retorna o mock bonito
-    if not APIFY_TOKEN:
-        return {"platform": platform, "nicho": nicho, "updated_at": datetime.utcnow().isoformat(), "items": mock_fallback}
 
-    results = []
-
-    # 1. TikTok
-    if platform in ("all", "tiktok"):
-        tiktok_data = await fetch_from_apify(
-            TIKTOK_ACTOR,
-            {"hashtags": hashtags, "resultsPerPage": 3, "shouldDownloadVideos": False} # Puxa menos para ser mais rápido
-        )
-        if tiktok_data:
-            for item in tiktok_data:
-                desc = item.get("desc") or item.get("text") or f"Tendência no TikTok sobre #{hashtags[0]}"
-                results.append({
-                    "id": item.get("id", ""), "platform": "tiktok",
-                    "titulo": (desc[:80] + "...") if len(desc) > 80 else desc,
-                    "views": item.get("playCount", 0), "likes": item.get("diggCount", 0),
-                    "crescimento": "+Novo"
-                })
-
-    # 2. Instagram
-    if platform in ("all", "instagram"):
-        ig_data = await fetch_from_apify(
-            INSTAGRAM_ACTOR,
-            {"hashtags": hashtags, "resultsLimit": 3}
-        )
-        if ig_data:
-            for item in ig_data:
-                # O Instagram via Apify pode retornar a legenda em campos diferentes
-                desc = item.get("caption") or item.get("text") or f"Post sobre #{hashtags[0]}"
-                if isinstance(desc, dict): # As vezes vem como dicionário
-                    desc = desc.get("text", "Post em alta")
-                
-                results.append({
-                    "id": item.get("id", ""), "platform": "instagram",
-                    "titulo": (desc[:80] + "...") if len(desc) > 80 else desc,
-                    "views": item.get("videoViewCount", 0), # Tenta pegar views de vídeo
-                    "likes": item.get("likesCount", 0),
-                    "crescimento": "+Novo"
-                })
-
-    # SE O APIFY FALHAR OU DEMORAR, USA O PLANO B COMPLETO PARA NÃO DEIXAR A TELA VAZIA
-    if not results:
-        results = mock_fallback
-
-    return {"platform": platform, "nicho": nicho, "updated_at": datetime.utcnow().isoformat(), "items": results}
-
-# --- ROTA DE HORÁRIOS ---
 @app.get("/best-times")
 @app.get("/api/best-times")
 def best_times(platform: str = Query("instagram"), format: str = Query("reels")):
-    dias = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
-    horas = [6, 9, 12, 15, 18, 21]
-    heatmap = [{"dia": d, "hora": h, "score": (i * 7 + j * 11) % 60 + 40}
-               for i, d in enumerate(dias) for j, h in enumerate(horas)]
-    return {"platform": platform, "format": format, "heatmap": heatmap}
+    days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+    hours = [6, 9, 12, 15, 18, 21]
+    return {"source": "demo", "platform": platform, "format": format,
+            "heatmap": [{"dia": day, "hora": hour, "score": (i * 7 + j * 11) % 60 + 40}
+                        for i, day in enumerate(days) for j, hour in enumerate(hours)]}
 
-# --- ROTA DE ANÁLISE ---
+
 @app.get("/analyze")
 @app.get("/api/analyze")
-def analyze(username: str = Query(...), platform: str = Query("instagram")):
-    return {
-        "username": username, "platform": platform,
-        "status": "mock", "message": "Análise real requer Meta Graph API.",
-        "suggested_times": ["Qua 12:00", "Qui 09:00", "Sex 18:00"],
-        "suggested_formats": ["Reels", "Carrossel"],
-    }
+def analyze(username: str = Query(..., min_length=1, max_length=80), platform: str = Query("instagram")):
+    return {"username": username, "platform": platform, "status": "not_connected",
+            "message": "A análise personalizada requer uma integração com os insights da sua conta.",
+            "suggested_times": [], "suggested_formats": []}
