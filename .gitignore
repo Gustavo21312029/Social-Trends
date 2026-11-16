@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+dist/
+
+# Estado da hospedagem de prévia, separado da Vercel.
+.openai/
+public/downloads/
