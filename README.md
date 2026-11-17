@@ -4,7 +4,9 @@ Radar responsivo de referências por rede social e nicho. HTML, CSS e JavaScript
 
 ## O que funciona
 
-- Abas para TikTok, Instagram, X, YouTube e Facebook.
+- Abas para TikTok, Instagram, X, YouTube e Facebook, com temas e layouts próprios.
+- Guias editoriais por rede e criação de pautas a partir da plataforma e do nicho selecionados.
+- Links diretos para as páginas, como `/?platform=instagram`, mantendo os demais parâmetros da URL.
 - Dez nichos, busca com acentos normalizados, ordenação por visualizações, curtidas e crescimento ilustrativo, períodos e carregamento progressivo.
 - Detalhes dos conteúdos, salvos persistidos em localStorage e planejador de pautas com data.
 - Ideias editoriais e mapa demonstrativo de horários.
@@ -49,3 +51,7 @@ Variáveis opcionais: `TIKTOK_ACTOR_ID` (padrão `clockworks~tiktok-scraper`) e 
 ## Imagens
 
 Fotografias ilustrativas do Unsplash, armazenadas localmente em `public/assets/`. Não representam os criadores ou publicações listados. Fontes DM Sans e Manrope via Google Fonts, com fallback de sistema.
+
+## Próximas melhorias para criadores
+
+As propostas priorizadas de roteiros, produção, calendário, coleções e acompanhamento manual estão em [Melhorias para criadores](docs/MELHORIAS-PARA-CRIADORES.md). Os novos temas são apenas uma mudança de apresentação e de atalhos de criação: não adicionam coletores pagos nem novas fontes de métricas.

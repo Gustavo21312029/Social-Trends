@@ -1,0 +1,958 @@
+/* Platform identities. All data labels remain independent from the visual theme. */
+:root {
+  --surface: #fff;
+  --surface-soft: #f5f1fc;
+  --theme-accent: #7855e7;
+  --theme-soft: #f0ebfd;
+  --theme-text: #6241cd;
+  --theme-hero: #eee8fc;
+}
+body[data-platform="tiktok"] {
+  color-scheme: dark;
+  --bg: #101014;
+  --ink: #f4f4f6;
+  --muted: #b0b0bf;
+  --line: #303039;
+  --surface: #1b1b22;
+  --surface-soft: #25252e;
+  --purple: #25f4ee;
+  --theme-accent: #25f4ee;
+  --theme-soft: #163436;
+  --theme-text: #7ef8f4;
+  --theme-hero: #18181f;
+}
+body[data-platform="instagram"] {
+  --bg: #fffafc;
+  --muted: #756575;
+  --purple: #bd2673;
+  --theme-accent: #c72b79;
+  --theme-soft: #fbeaf3;
+  --theme-text: #a91f65;
+  --theme-hero: #fff1f5;
+  --surface-soft: #fcf0f6;
+}
+body[data-platform="x"] {
+  --bg: #f7f7f7;
+  --ink: #111;
+  --muted: #626262;
+  --line: #e4e4e4;
+  --purple: #111;
+  --theme-accent: #111;
+  --theme-soft: #ececec;
+  --theme-text: #303030;
+  --theme-hero: #111;
+  --surface-soft: #f1f1f1;
+}
+body[data-platform="youtube"] {
+  --bg: #fafafa;
+  --muted: #71676b;
+  --ink: #202020;
+  --line: #e9e5e5;
+  --purple: #d91c24;
+  --theme-accent: #d91c24;
+  --theme-soft: #fff0f0;
+  --theme-text: #b01720;
+  --theme-hero: #fff0f0;
+  --surface-soft: #fff3f3;
+}
+body[data-platform="facebook"] {
+  --bg: #f0f3f8;
+  --muted: #64718a;
+  --ink: #202c40;
+  --line: #dfe5ee;
+  --purple: #0866ff;
+  --theme-accent: #0866ff;
+  --theme-soft: #eaf2ff;
+  --theme-text: #1758bb;
+  --theme-hero: #e8f0ff;
+  --surface-soft: #edf3fe;
+}
+body:not([data-platform="all"])
+  :is(
+    .sidebar,
+    .topbar,
+    .content-card,
+    .panel,
+    .idea-card,
+    .plan-row,
+    .empty-state,
+    dialog
+  ) {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+body:not([data-platform="all"])
+  :is(.nav-item.active, .chip.active, .workspace-avatar) {
+  background: var(--theme-soft);
+  color: var(--theme-text);
+}
+body:not([data-platform="all"]) .nav-item:not(.active):hover {
+  background: var(--surface-soft);
+  color: var(--theme-text);
+}
+body:not([data-platform="all"]) :is(.nav-live, .brand-mark) {
+  background: var(--theme-accent);
+}
+body:not([data-platform="all"])
+  :is(
+    .search-field,
+    .select-field,
+    .platform-tab,
+    .secondary-button,
+    .planner-form input,
+    .planner-form select
+  ) {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+body:not([data-platform="all"])
+  :is(.select-field select, .period-select select, .search-field input) {
+  color: var(--ink);
+}
+body:not([data-platform="all"])
+  :is(
+    .page-heading p,
+    .discovery-heading p,
+    .section-line > span,
+    .results-line,
+    .period-select,
+    .sample-label,
+    .eyebrow
+  ) {
+  color: var(--muted);
+}
+body:not([data-platform="all"])
+  :is(.tip-card, .note-box, .detail-metrics, .close-dialog) {
+  background: var(--surface-soft);
+  color: var(--muted);
+  border-color: var(--line);
+}
+body:not([data-platform="all"])
+  :is(.tip-card p, .tip-card button, .tip-spark, .dialog-eyebrow) {
+  color: var(--theme-text);
+}
+body:not([data-platform="all"]) :is(.tip-card strong, .detail-metrics strong) {
+  color: var(--ink);
+}
+body:not([data-platform="all"]) .hero-banner {
+  background: var(--theme-hero);
+  border-color: var(--line);
+}
+body:not([data-platform="all"]) .hero-copy {
+  width: 48%;
+  align-self: center;
+  padding: 35px;
+}
+body:not([data-platform="all"]) .hero-copy h2 {
+  color: var(--ink);
+  font-size: clamp(26px, 2.7vw, 39px);
+}
+body:not([data-platform="all"]) .hero-copy p {
+  color: var(--muted);
+  max-width: 330px;
+  font-size: 12px;
+  line-height: 1.85;
+  margin: 17px 0;
+}
+body:not([data-platform="all"]) .hero-badge {
+  color: var(--theme-text);
+  font-size: 9px;
+}
+body:not([data-platform="all"]) .hero-badge > span {
+  background: var(--theme-accent);
+}
+body:not([data-platform="all"]) .hero-copy button:not(.hero-explore-link) {
+  background: var(--theme-accent);
+  color: white;
+  border-color: transparent;
+  padding: 12px 14px;
+  font-size: 11px;
+}
+.hero-copy button svg {
+  width: 15px;
+  height: 15px;
+}
+body:not([data-platform="all"]) .hero-copy .hero-explore-link {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 12px 0;
+  color: var(--theme-text);
+  display: flex;
+  font-size: 10px;
+  margin-top: 6px;
+}
+.platform-section {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+#platform-panel {
+  border-radius: 15px;
+}
+.platform-tabs {
+  gap: 9px;
+}
+.platform-tab {
+  min-height: 52px;
+}
+.platform-tab.active {
+  box-shadow: 0 2px 8px #25202d0a;
+}
+.platform-board {
+  align-self: center;
+  width: 44%;
+  margin: 26px 28px 26px 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 26px #201c3008;
+}
+.board-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.board-network {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 650;
+  font-size: 13px;
+}
+.board-network svg {
+  width: 18px;
+  height: 18px;
+  color: var(--theme-accent);
+}
+.board-label {
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.board-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+.board-formats > span {
+  border-radius: 5px;
+  padding: 5px 8px;
+  background: var(--theme-soft);
+  color: var(--theme-text);
+  font-size: 9px;
+}
+.board-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 20px 0 18px;
+}
+.board-content p {
+  font:
+    650 14px/1.8 Manrope,
+    sans-serif;
+  letter-spacing: -0.2px;
+}
+.board-symbol {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  background: var(--theme-soft);
+  color: var(--theme-text);
+  border-radius: 9px;
+}
+.board-symbol svg {
+  width: 15px;
+  height: 15px;
+}
+.board-steps {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 10px;
+}
+.board-steps li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.board-steps li span {
+  color: var(--theme-text);
+  font-size: 8px;
+  background: var(--theme-soft);
+  padding: 4px;
+  border-radius: 4px;
+}
+.board-caption {
+  display: block;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-top: 18px;
+  font-size: 8px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+/* TikTok: a dark studio and tall, vertical reference cards. */
+body[data-platform="tiktok"] .hero-banner {
+  background:
+    radial-gradient(ellipse at 90% 0%, #10373a, transparent 60%),
+    radial-gradient(ellipse at 0% 100%, #452334, transparent 65%), #16161c;
+  border-color: #3a3a43;
+}
+body[data-platform="tiktok"] .board-tiktok {
+  border-top: 2px solid #25f4ee;
+  border-bottom: 2px solid #fe2c55;
+  background: #111116;
+}
+body[data-platform="tiktok"] .board-tiktok .board-content {
+  min-height: 125px;
+  align-items: center;
+}
+body[data-platform="tiktok"] .board-symbol {
+  box-shadow:
+    -3px 0 #25f4ee,
+    3px 0 #fe2c55;
+  background: #24242e;
+  color: white;
+}
+body[data-platform="tiktok"]
+  :is(.primary-button, .hero-copy button:not(.hero-explore-link)) {
+  color: #052b2a;
+  background: #25f4ee;
+}
+body[data-platform="tiktok"] .brand-mark svg {
+  stroke: #052b2a;
+}
+body[data-platform="tiktok"] .platform-tab.active[data-platform="tiktok"] {
+  background: #143436;
+  border-color: #25f4ee;
+  color: #a5fffc;
+}
+body[data-platform="tiktok"]
+  :is(
+    .nav-item,
+    .help-button,
+    .breadcrumb strong,
+    .creator,
+    .card-metrics,
+    .footer-brand,
+    .dialog-description,
+    .demo-indicator,
+    footer
+  ) {
+  color: #bdbdcc;
+}
+body[data-platform="tiktok"]
+  :is(
+    .workspace small,
+    .profile small,
+    .nav-label,
+    .breadcrumb,
+    .search-field input::placeholder,
+    .creator-avatar,
+    .board-label
+  ) {
+  color: #a8a8b9;
+}
+body[data-platform="tiktok"] :is(.saved-count, .creator-avatar) {
+  background: #30303a;
+}
+body[data-platform="tiktok"] .card-metrics {
+  border-color: #383842;
+}
+body[data-platform="tiktok"] .card-category {
+  background: #153638;
+  color: #91e9e6;
+}
+body[data-platform="tiktok"] .growth {
+  background: #123428;
+  color: #a0dabc !important;
+}
+body[data-platform="tiktok"] .live-label {
+  background: #17362d;
+  color: #9adbc1;
+}
+body[data-platform="tiktok"] .chip {
+  color: #b1aabd;
+}
+body[data-platform="tiktok"] .chip.active {
+  color: #a5fffc;
+  border-color: #31686a;
+}
+body[data-platform="tiktok"] .content-card:hover {
+  box-shadow:
+    0 0 0 1px #25f4ee66,
+    0 10px 30px #0003;
+}
+body[data-platform="tiktok"] #content-grid .card-visual {
+  height: auto;
+  aspect-ratio: 3 / 4;
+}
+body[data-platform="tiktok"] #content-grid .content-card {
+  border-radius: 12px;
+}
+body[data-platform="tiktok"] .save-button.saved {
+  color: #056b67;
+}
+body[data-platform="tiktok"] .heatmap {
+  color: #c5b1dd;
+}
+body[data-platform="tiktok"] .heatmap .heat-cell {
+  color: #fff;
+}
+body[data-platform="tiktok"] .time-tag {
+  background: #292234;
+  color: #e1c7fc;
+}
+body[data-platform="tiktok"] :focus-visible {
+  outline-color: #25f4ee;
+}
+/* Instagram: a gallery with a warm, violet-to-pink studio header. */
+body[data-platform="instagram"] .hero-banner {
+  background:
+    radial-gradient(ellipse at 5% 100%, #ffddad, transparent 65%),
+    linear-gradient(110deg, #fff1f5, #f2e9ff);
+  border-color: #edd5e5;
+}
+body[data-platform="instagram"] .hero-copy h2 {
+  color: #542347;
+}
+body[data-platform="instagram"] .board-instagram {
+  position: relative;
+  border: 0;
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(35deg, #f4b450, #db4778, #9135ce) border-box;
+  border: 2px solid transparent;
+}
+body[data-platform="instagram"] .board-instagram .board-formats > span {
+  flex: 1;
+  aspect-ratio: 1.45;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 650;
+}
+body[data-platform="instagram"]
+  .board-instagram
+  .board-formats
+  > span:nth-child(1) {
+  background: #f9e3ed;
+  color: #9f245d;
+}
+body[data-platform="instagram"]
+  .board-instagram
+  .board-formats
+  > span:nth-child(2) {
+  background: #f0e4fd;
+  color: #7c36ad;
+}
+body[data-platform="instagram"]
+  .board-instagram
+  .board-formats
+  > span:nth-child(3) {
+  background: #fff0db;
+  color: #916022;
+}
+body[data-platform="instagram"] #content-grid .card-visual {
+  height: auto;
+  aspect-ratio: 1;
+}
+body[data-platform="instagram"] #content-grid .content-card {
+  border-radius: 9px;
+}
+body[data-platform="instagram"] #content-grid .card-body {
+  border-top: 2px solid #eaa1c2;
+}
+body[data-platform="instagram"] .primary-button {
+  background: linear-gradient(100deg, #ba2675, #8c3cac);
+}
+/* X: typography first, a monochrome header and a single-column discussion feed. */
+body[data-platform="x"] .hero-banner {
+  background: #111;
+  border-color: #111;
+}
+body[data-platform="x"] .hero-copy h2 {
+  color: #fff;
+  letter-spacing: -1.4px;
+}
+body[data-platform="x"] .hero-copy p {
+  color: #b6b6bd;
+}
+body[data-platform="x"] .hero-badge {
+  color: #ddd;
+}
+body[data-platform="x"] .hero-badge > span {
+  background: white;
+}
+body[data-platform="x"] .hero-copy button:not(.hero-explore-link) {
+  background: white;
+  color: #111;
+  border-radius: 24px;
+}
+body[data-platform="x"] .hero-copy .hero-explore-link {
+  color: #ccc;
+}
+body[data-platform="x"] .board-x {
+  background: #1c1c1c;
+  border-color: #424242;
+  color: white;
+  border-radius: 0;
+  box-shadow: none;
+}
+body[data-platform="x"]
+  .board-x
+  :is(.board-label, .board-caption, .board-steps li) {
+  color: #b5b5b5;
+}
+body[data-platform="x"] .board-x :is(.board-network svg, .board-symbol) {
+  color: #eee;
+}
+body[data-platform="x"]
+  .board-x
+  :is(.board-symbol, .board-formats > span, .board-steps li span) {
+  background: #303030;
+  color: #eee;
+}
+body[data-platform="x"] .board-x .board-caption {
+  border-color: #424242;
+}
+body[data-platform="x"] #content-grid {
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 920px;
+  margin: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+body[data-platform="x"] #content-grid .content-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 154px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+}
+body[data-platform="x"] #content-grid .content-card:last-child {
+  border-bottom: 0;
+}
+body[data-platform="x"] #content-grid .content-card:hover {
+  transform: none;
+  background: #fcfcfc;
+}
+body[data-platform="x"] #content-grid .card-visual {
+  order: 2;
+  height: 120px;
+  margin: 20px 20px 20px 0;
+  border-radius: 8px;
+  align-self: center;
+}
+body[data-platform="x"]
+  #content-grid
+  .card-visual
+  :is(.card-platform, .format-badge, .card-rank) {
+  display: none;
+}
+body[data-platform="x"] #content-grid .card-body {
+  padding: 22px;
+}
+body[data-platform="x"] #content-grid .card-body h3 {
+  min-height: 0;
+  font-size: 16px;
+  line-height: 1.75;
+}
+body[data-platform="x"] .card-category {
+  background: #f1f1f1;
+  color: #666;
+}
+body[data-platform="x"] #content-grid .card-metrics {
+  max-width: 440px;
+}
+/* YouTube: landscape thumbnails and a video-library layout. */
+body[data-platform="youtube"] .hero-banner {
+  background: linear-gradient(110deg, #fff1f1, #fff9f9);
+  border-color: #f0d8d8;
+}
+body[data-platform="youtube"] .hero-copy h2 {
+  color: #3b2224;
+}
+body[data-platform="youtube"] .board-youtube .board-content {
+  background: #2a2123;
+  color: #fff;
+  margin-top: 14px;
+  border-radius: 9px;
+  padding: 20px 16px;
+  min-height: 120px;
+  align-items: center;
+}
+body[data-platform="youtube"] .board-youtube .board-symbol {
+  background: #d91c24;
+  color: #fff;
+  width: 42px;
+  height: 31px;
+  flex-basis: 42px;
+}
+body[data-platform="youtube"] .board-youtube .board-steps {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+body[data-platform="youtube"] .board-youtube .board-steps li {
+  font-size: 9px;
+}
+body[data-platform="youtube"] #content-grid .card-visual {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 11px;
+}
+body[data-platform="youtube"] #content-grid .content-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+body[data-platform="youtube"] #content-grid .card-body {
+  padding: 13px 4px;
+}
+body[data-platform="youtube"] #content-grid .card-body h3 {
+  font-size: 13px;
+}
+body[data-platform="youtube"] #content-grid .card-category {
+  background: transparent;
+  color: #9d272d;
+  padding: 0;
+}
+/* Facebook: spacious community cards, blue highlights and a two-column feed. */
+body[data-platform="facebook"] .hero-banner {
+  background: linear-gradient(110deg, #e3edff, #f2f6ff);
+  border-color: #cfdcf2;
+}
+body[data-platform="facebook"] .hero-copy h2 {
+  color: #193963;
+}
+body[data-platform="facebook"] .board-facebook .board-top {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e5ebf5;
+}
+body[data-platform="facebook"] .board-facebook .board-symbol {
+  border-radius: 50%;
+}
+body[data-platform="facebook"] .board-facebook .board-formats > span {
+  border-radius: 16px;
+}
+body[data-platform="facebook"] #content-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 1050px;
+  margin: auto;
+}
+body[data-platform="facebook"] #content-grid .card-visual {
+  height: auto;
+  aspect-ratio: 1.65;
+}
+body[data-platform="facebook"] #content-grid .card-body {
+  padding: 19px;
+}
+body[data-platform="facebook"] #content-grid .card-body h3 {
+  font-size: 14px;
+}
+body[data-platform="facebook"] .card-category {
+  background: #edf3ff;
+  color: #285fa9;
+}
+@media (max-width: 1100px) {
+  body:not([data-platform="all"]) .hero-copy {
+    padding: 26px;
+  }
+  .platform-board {
+    width: 46%;
+    margin-right: 20px;
+    padding: 16px;
+  }
+  .board-content p {
+    font-size: 12px;
+  }
+  .board-label {
+    font-size: 6px;
+  }
+  .board-network {
+    font-size: 11px;
+  }
+  body[data-platform="x"] #content-grid .card-body h3 {
+    font-size: 14px;
+  }
+}
+@media (max-width: 900px) {
+  body:not([data-platform="all"]) .hero-banner {
+    flex-wrap: wrap;
+  }
+  body:not([data-platform="all"]) .hero-copy {
+    width: 100%;
+    padding: 28px;
+  }
+  body:not([data-platform="all"]) .hero-copy p {
+    max-width: 460px;
+  }
+  body:not([data-platform="all"]) .hero-copy h2 {
+    font-size: 32px;
+  }
+  .platform-board {
+    width: 100%;
+    margin: 0 26px 26px;
+  }
+  .board-content {
+    padding: 15px 0;
+  }
+  .board-content p {
+    font-size: 14px;
+  }
+  .board-label {
+    font-size: 8px;
+  }
+  .board-network {
+    font-size: 13px;
+  }
+  .board-steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .board-caption {
+    margin-top: 14px;
+  }
+  body[data-platform="instagram"] .board-instagram .board-formats > span {
+    aspect-ratio: auto;
+    min-height: 48px;
+  }
+  body[data-platform="tiktok"] .board-tiktok .board-content {
+    min-height: 0;
+  }
+  body[data-platform="youtube"] .board-youtube .board-content {
+    min-height: 90px;
+  }
+  body[data-platform="x"] #content-grid .content-card {
+    grid-template-columns: minmax(0, 1fr) 120px;
+  }
+  body[data-platform="x"] #content-grid .card-visual {
+    height: 100px;
+    margin-right: 14px;
+  }
+  body[data-platform="x"] #content-grid .card-body {
+    padding: 18px;
+  }
+}
+@media (max-width: 560px) {
+  .platform-section {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .platform-tab {
+    min-height: 45px;
+  }
+  body:not([data-platform="all"]) .hero-copy {
+    padding: 25px 22px 12px;
+  }
+  body:not([data-platform="all"]) .hero-copy h2 {
+    font-size: 30px;
+  }
+  body:not([data-platform="all"]) .hero-copy p {
+    font-size: 12px;
+    margin: 15px 0;
+  }
+  .platform-board {
+    margin: 0 16px 18px;
+    padding: 17px;
+    width: calc(100% - 32px);
+  }
+  .board-content p {
+    font-size: 13px;
+  }
+  .board-label {
+    font-size: 7px;
+  }
+  .board-steps {
+    flex-direction: column;
+  }
+  body[data-platform="tiktok"] #content-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-visual {
+    aspect-ratio: 3 / 4;
+  }
+  body[data-platform="tiktok"] #content-grid .card-body {
+    padding: 11px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-body h3 {
+    font-size: 11px;
+    min-height: 55px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-category {
+    font-size: 8px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-rank {
+    font-size: 7px;
+    left: 7px;
+    bottom: 9px;
+  }
+  body[data-platform="tiktok"] #content-grid .format-badge {
+    display: none;
+  }
+  body[data-platform="tiktok"] #content-grid .card-platform {
+    font-size: 7px;
+    padding: 5px;
+    left: 7px;
+    top: 7px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-platform svg {
+    width: 10px;
+    height: 10px;
+  }
+  body[data-platform="tiktok"] #content-grid .save-button {
+    width: 32px;
+    height: 32px;
+    top: 7px;
+    right: 7px;
+  }
+  body[data-platform="tiktok"] #content-grid .creator {
+    font-size: 8px;
+    gap: 3px;
+    overflow-wrap: anywhere;
+  }
+  body[data-platform="tiktok"] #content-grid .verified {
+    display: none;
+  }
+  body[data-platform="tiktok"] #content-grid .card-metrics {
+    gap: 7px;
+    flex-wrap: wrap;
+    font-size: 8px;
+  }
+  body[data-platform="tiktok"] #content-grid .card-metrics svg {
+    width: 11px;
+    height: 11px;
+  }
+  body[data-platform="tiktok"] #content-grid .growth {
+    margin-left: 0;
+    font-size: 7px !important;
+  }
+  body[data-platform="instagram"] #content-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+  body[data-platform="instagram"] #content-grid .card-body {
+    padding: 11px;
+  }
+  body[data-platform="instagram"] #content-grid .card-body h3 {
+    font-size: 11px;
+    min-height: 55px;
+  }
+  body[data-platform="instagram"] #content-grid .creator {
+    font-size: 8px;
+    overflow-wrap: anywhere;
+    gap: 3px;
+  }
+  body[data-platform="instagram"] #content-grid .verified {
+    display: none;
+  }
+  body[data-platform="instagram"] #content-grid .card-metrics {
+    gap: 6px;
+    font-size: 8px;
+    flex-wrap: wrap;
+  }
+  body[data-platform="instagram"] #content-grid .growth {
+    margin-left: 0;
+    font-size: 7px !important;
+  }
+  body[data-platform="instagram"] #content-grid .card-metrics svg {
+    width: 11px;
+    height: 11px;
+  }
+  body[data-platform="instagram"] #content-grid .format-badge,
+  body[data-platform="instagram"] #content-grid .card-rank {
+    display: none;
+  }
+  body[data-platform="instagram"] #content-grid .card-platform {
+    padding: 5px;
+    font-size: 7px;
+    left: 7px;
+    top: 7px;
+  }
+  body[data-platform="instagram"] #content-grid .card-platform svg {
+    width: 10px;
+    height: 10px;
+  }
+  body[data-platform="instagram"] #content-grid .save-button {
+    width: 32px;
+    height: 32px;
+    top: 7px;
+    right: 7px;
+  }
+  body[data-platform="facebook"] #content-grid {
+    grid-template-columns: 1fr;
+  }
+  body[data-platform="youtube"] #content-grid .card-body h3 {
+    font-size: 14px;
+  }
+  body[data-platform="x"] #content-grid .content-card {
+    grid-template-columns: minmax(0, 1fr) 85px;
+  }
+  body[data-platform="x"] #content-grid .card-body {
+    padding: 16px 12px;
+  }
+  body[data-platform="x"] #content-grid .card-body h3 {
+    font-size: 12px;
+  }
+  body[data-platform="x"] #content-grid .card-visual {
+    height: 83px;
+    margin-right: 10px;
+  }
+  body[data-platform="x"] #content-grid .card-metrics {
+    gap: 10px;
+    font-size: 9px;
+    flex-wrap: wrap;
+  }
+  body[data-platform="x"] #content-grid .card-metrics .growth {
+    margin-left: 0;
+  }
+}
+@media (max-width: 359px) {
+  body[data-platform="tiktok"] #content-grid,
+  body[data-platform="instagram"] #content-grid {
+    grid-template-columns: 1fr;
+  }
+  body[data-platform="tiktok"] #content-grid .card-body h3,
+  body[data-platform="instagram"] #content-grid .card-body h3 {
+    min-height: 0;
+    font-size: 13px;
+  }
+}
+
+/* Badges overlay photographs even when the surrounding page is dark. */
+.card-platform {
+  color: #292533;
+}
+
+.sidebar {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+@media (max-width: 359px) {
+  .platform-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

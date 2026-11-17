@@ -17,8 +17,9 @@
     />
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="themes.css" />
   </head>
-  <body>
+  <body data-platform="all">
     <aside class="sidebar" id="sidebar">
       <a href="#" class="brand" aria-label="Social Trends início"
         ><span class="brand-mark"
@@ -112,55 +113,6 @@
           </button>
         </div>
         <div id="explore-section">
-          <section class="hero-banner" aria-label="Destaque">
-            <div class="hero-copy">
-              <span class="hero-badge"
-                ><span></span> CONECTE-SE AO QUE IMPORTA</span
-              >
-              <h2>Menos rolagem.<br />Mais inspiração.</h2>
-              <p>
-                As principais redes, os melhores conteúdos<br
-                  class="desktop-br"
-                />
-                e o seu nicho. Tudo em um só lugar.
-              </p>
-              <button id="explore-now">
-                Encontre sua próxima ideia <span>↗</span>
-              </button>
-            </div>
-            <div class="hero-art" aria-hidden="true">
-              <div class="orbit orbit-one"></div>
-              <div class="orbit orbit-two"></div>
-              <div class="orbit orbit-three"></div>
-              <span class="art-star star-one">✦</span
-              ><span class="art-star star-two">✧</span
-              ><span
-                class="floating-platform float-instagram"
-                data-social="instagram"
-              ></span
-              ><span
-                class="floating-platform float-tiktok"
-                data-social="tiktok"
-              ></span
-              ><span
-                class="floating-platform float-youtube"
-                data-social="youtube"
-              ></span
-              ><span class="floating-platform float-x" data-social="x"></span
-              ><span
-                class="floating-platform float-facebook"
-                data-social="facebook"
-              ></span>
-              <div class="trend-float">
-                <span>↗</span>
-                <div>
-                  Encontre sua oportunidade<small
-                    >Uma tendência. Infinitas possibilidades.</small
-                  >
-                </div>
-              </div>
-            </div>
-          </section>
           <section class="platform-section" aria-label="Escolher rede social">
             <div class="section-line">
               <h2>Onde você quer se inspirar?</h2>
@@ -173,71 +125,127 @@
               id="platform-tabs"
             ></div>
           </section>
-          <section class="discovery" aria-labelledby="discovery-title">
-            <div class="section-line discovery-heading">
-              <div>
-                <h2 id="discovery-title">
-                  Em alta agora
-                  <span class="live-label"><span></span> EXPLORE</span>
-                </h2>
-                <p id="results-subtitle">
-                  Uma seleção para despertar suas próximas ideias.
+          <div
+            id="platform-panel"
+            role="tabpanel"
+            aria-labelledby="platform-tab-all"
+            tabindex="0"
+          >
+            <section class="hero-banner" aria-label="Destaque">
+              <div class="hero-copy">
+                <span class="hero-badge"
+                  ><span></span> CONECTE-SE AO QUE IMPORTA</span
+                >
+                <h2>Menos rolagem.<br />Mais inspiração.</h2>
+                <p>
+                  As principais redes, os melhores conteúdos<br
+                    class="desktop-br"
+                  />
+                  e o seu nicho. Tudo em um só lugar.
                 </p>
+                <button id="explore-now">
+                  Encontre sua próxima ideia <span>↗</span>
+                </button>
               </div>
-              <label class="period-select"
-                ><i data-icon="calendar"></i
-                ><select id="period" aria-label="Período">
-                  <option value="7">Últimos 7 dias</option>
-                  <option value="1">Últimas 24 horas</option>
-                  <option value="30">Últimos 30 dias</option></select
-                ><i data-icon="chevron"></i
-              ></label>
-            </div>
-            <div class="filter-bar">
-              <label class="search-field"
-                ><i data-icon="search"></i
-                ><input
-                  id="search"
-                  type="search"
-                  placeholder="Buscar assuntos, criadores ou hashtags..."
-                  aria-label="Buscar conteúdos"
-                /><kbd>/</kbd></label
-              ><label class="select-field niche-select"
-                ><i data-icon="sliders"></i
-                ><select id="niche" aria-label="Filtrar por nicho"></select
-                ><i data-icon="chevron"></i></label
-              ><label class="select-field sort-select"
-                ><i data-icon="sort"></i
-                ><select id="sort" aria-label="Ordenar resultados">
-                  <option value="views">Mais visualizados</option>
-                  <option value="likes">Mais curtidos</option>
-                  <option value="growth">Maior crescimento</option></select
-                ><i data-icon="chevron"></i
-              ></label>
-            </div>
-            <div
-              class="niche-chips"
-              id="niche-chips"
-              aria-label="Nichos rápidos"
-            ></div>
-            <div class="results-line">
-              <span id="result-count" role="status" aria-live="polite"></span
-              ><span class="sample-label"
-                ><i data-icon="info"></i> Dados de exemplo • métricas
-                ilustrativas</span
-              >
-            </div>
-            <div
-              id="content-grid"
-              class="content-grid"
-              aria-live="polite"
-            ></div>
-            <div class="load-more-wrap">
-              <button class="secondary-button" id="load-more">
-                Explorar mais conteúdos <i data-icon="arrow-down"></i>
-              </button>
-            </div>
-          </section>
+              <div class="hero-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="orbit orbit-three"></div>
+                <span class="art-star star-one">✦</span
+                ><span class="art-star star-two">✧</span
+                ><span
+                  class="floating-platform float-instagram"
+                  data-social="instagram"
+                ></span
+                ><span
+                  class="floating-platform float-tiktok"
+                  data-social="tiktok"
+                ></span
+                ><span
+                  class="floating-platform float-youtube"
+                  data-social="youtube"
+                ></span
+                ><span class="floating-platform float-x" data-social="x"></span
+                ><span
+                  class="floating-platform float-facebook"
+                  data-social="facebook"
+                ></span>
+                <div class="trend-float">
+                  <span>↗</span>
+                  <div>
+                    Encontre sua oportunidade<small
+                      >Uma tendência. Infinitas possibilidades.</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="discovery" aria-labelledby="discovery-title">
+              <div class="section-line discovery-heading">
+                <div>
+                  <h2 id="discovery-title">
+                    Em alta agora
+                    <span class="live-label"><span></span> EXPLORE</span>
+                  </h2>
+                  <p id="results-subtitle">
+                    Uma seleção para despertar suas próximas ideias.
+                  </p>
+                </div>
+                <label class="period-select"
+                  ><i data-icon="calendar"></i
+                  ><select id="period" aria-label="Período">
+                    <option value="7">Últimos 7 dias</option>
+                    <option value="1">Últimas 24 horas</option>
+                    <option value="30">Últimos 30 dias</option></select
+                  ><i data-icon="chevron"></i
+                ></label>
+              </div>
+              <div class="filter-bar">
+                <label class="search-field"
+                  ><i data-icon="search"></i
+                  ><input
+                    id="search"
+                    type="search"
+                    placeholder="Buscar assuntos, criadores ou hashtags..."
+                    aria-label="Buscar conteúdos"
+                  /><kbd>/</kbd></label
+                ><label class="select-field niche-select"
+                  ><i data-icon="sliders"></i
+                  ><select id="niche" aria-label="Filtrar por nicho"></select
+                  ><i data-icon="chevron"></i></label
+                ><label class="select-field sort-select"
+                  ><i data-icon="sort"></i
+                  ><select id="sort" aria-label="Ordenar resultados">
+                    <option value="views">Mais visualizados</option>
+                    <option value="likes">Mais curtidos</option>
+                    <option value="growth">Maior crescimento</option></select
+                  ><i data-icon="chevron"></i
+                ></label>
+              </div>
+              <div
+                class="niche-chips"
+                id="niche-chips"
+                aria-label="Nichos rápidos"
+              ></div>
+              <div class="results-line">
+                <span id="result-count" role="status" aria-live="polite"></span
+                ><span class="sample-label"
+                  ><i data-icon="info"></i> Dados de exemplo • métricas
+                  ilustrativas</span
+                >
+              </div>
+              <div
+                id="content-grid"
+                class="content-grid"
+                aria-live="polite"
+              ></div>
+              <div class="load-more-wrap">
+                <button class="secondary-button" id="load-more">
+                  Explorar mais conteúdos <i data-icon="arrow-down"></i>
+                </button>
+              </div>
+            </section>
+          </div>
         </div>
         <section id="secondary-section" hidden></section>
         <footer>

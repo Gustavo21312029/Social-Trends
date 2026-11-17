@@ -51,6 +51,107 @@ const platforms = {
   youtube: { name: "YouTube", color: "#ef4a4d", bg: "#fff0f0" },
   facebook: { name: "Facebook", color: "#3485ef", bg: "#eef5ff" },
 };
+// Editorial guidance, not performance claims or collected platform statistics.
+const platformPages = {
+  tiktok: {
+    title: "Sua próxima história começa no TikTok",
+    description:
+      "Referências para vídeos verticais, ganchos e histórias com a sua voz.",
+    eyebrow: "ESTÚDIO TIKTOK",
+    headline: "Uma boa história.\nNo seu ritmo.",
+    intro:
+      "Do primeiro gancho à última cena: organize uma ideia que você consegue gravar.",
+    focus: "Vídeo vertical",
+    formats: ["Vídeo curto", "Série", "Bastidores"],
+    prompt: "Qual pergunta do seu público merece uma resposta em vídeo?",
+    steps: [
+      "Abra com a pergunta",
+      "Mostre um exemplo",
+      "Convide para a conversa",
+    ],
+    planTitle: "Vídeo curto: uma pergunta que meu público faz",
+    metaColor: "#101014",
+  },
+  instagram: {
+    title: "Dê forma às suas ideias no Instagram",
+    description:
+      "Explore composições, histórias e referências para o seu próximo conteúdo.",
+    eyebrow: "ESTÚDIO INSTAGRAM",
+    headline: "Sua identidade.\nEm cada detalhe.",
+    intro:
+      "Reúna referências visuais e transforme uma ideia em Reel, carrossel ou Stories.",
+    focus: "Narrativa visual",
+    formats: ["Reel", "Carrossel", "Stories"],
+    prompt:
+      "Uma ideia, três maneiras de contar: escolha o formato que combina com você.",
+    steps: [
+      "Defina uma mensagem",
+      "Crie uma sequência visual",
+      "Finalize com um convite",
+    ],
+    planTitle: "Carrossel: uma ideia em uma sequência visual",
+    metaColor: "#c72b79",
+  },
+  x: {
+    title: "Sua perspectiva tem espaço no X",
+    description:
+      "Encontre pontos de partida para opiniões, conversas e threads autorais.",
+    eyebrow: "ESTÚDIO X",
+    headline: "Uma ideia clara.\nUma conversa aberta.",
+    intro:
+      "Organize um argumento, acrescente contexto e deixe espaço para outros pontos de vista.",
+    focus: "Texto e conversa",
+    formats: ["Post", "Thread", "Pergunta"],
+    prompt:
+      "Que opinião sobre o seu nicho você consegue defender com um exemplo?",
+    steps: [
+      "Apresente seu ponto",
+      "Acrescente um exemplo",
+      "Abra uma pergunta",
+    ],
+    planTitle: "Thread: meu ponto de vista com um exemplo",
+    metaColor: "#111111",
+  },
+  youtube: {
+    title: "Sua próxima ideia merece um vídeo",
+    description:
+      "Pesquise referências e organize histórias para vídeos, séries e Shorts.",
+    eyebrow: "ESTÚDIO YOUTUBE",
+    headline: "Do clique\nà próxima história.",
+    intro:
+      "Comece pela promessa do vídeo. Depois, conecte título, miniatura e roteiro.",
+    focus: "Vídeo e série",
+    formats: ["Vídeo", "Short", "Série"],
+    prompt: "Qual dúvida você consegue resolver do início ao fim em um vídeo?",
+    steps: [
+      "Escreva a promessa",
+      "Divida em três partes",
+      "Planeje título e miniatura",
+    ],
+    planTitle: "Vídeo: uma dúvida resolvida em três partes",
+    metaColor: "#d91c24",
+  },
+  facebook: {
+    title: "Crie conteúdo que aproxima pessoas",
+    description:
+      "Referências para histórias, vídeos e conversas com a sua comunidade.",
+    eyebrow: "ESTÚDIO FACEBOOK",
+    headline: "Mais histórias.\nMais conexão.",
+    intro:
+      "Compartilhe algo útil, conte uma experiência e convide sua comunidade a participar.",
+    focus: "Comunidade",
+    formats: ["Post", "Vídeo", "Conversa"],
+    prompt: "Que experiência sua pode ajudar alguém da sua comunidade hoje?",
+    steps: [
+      "Conte uma situação",
+      "Compartilhe o aprendizado",
+      "Convide outras experiências",
+    ],
+    planTitle: "Post: uma experiência para compartilhar com a comunidade",
+    metaColor: "#0866ff",
+  },
+};
+
 const niches = {
   all: "Todos os nichos",
   tecnologia: "Tecnologia",
@@ -79,6 +180,7 @@ const nicheEmoji = {
 };
 const $ = (s) => document.querySelector(s),
   $$ = (s) => document.querySelectorAll(s);
+const overviewHero = $(".hero-banner").innerHTML;
 const esc = (v) =>
   String(v ?? "").replace(
     /[&<>"']/g,
@@ -108,7 +210,12 @@ let plans = storageRead("socialtrends:plans", []).filter(
 );
 const state = {
   view: "trends",
-  platform: "all",
+  platform: Object.hasOwn(
+    platforms,
+    new URLSearchParams(location.search).get("platform"),
+  )
+    ? new URLSearchParams(location.search).get("platform")
+    : "all",
   niche: "all",
   period: 7,
   sort: "views",
@@ -197,7 +304,7 @@ function renderPlatforms() {
   $("#platform-tabs").innerHTML = Object.entries(platforms)
     .map(
       ([key, p]) =>
-        `<button role="tab" aria-selected="${state.platform === key}" tabindex="${state.platform === key ? 0 : -1}" class="platform-tab ${state.platform === key ? "active" : ""}" data-platform="${key}" style="${brandStyle(key)}"><span>${social(key)}</span>${p.name}</button>`,
+        `<button id="platform-tab-${key}" role="tab" aria-controls="platform-panel" aria-selected="${state.platform === key}" tabindex="${state.platform === key ? 0 : -1}" class="platform-tab ${state.platform === key ? "active" : ""}" data-platform="${key}" style="${brandStyle(key)}"><span>${social(key)}</span>${p.name}</button>`,
     )
     .join("");
 }
@@ -343,10 +450,70 @@ async function loadFeed() {
     }
   }
 }
+function platformPreview(page, key) {
+  const formats = page.formats
+    .map((format) => `<span>${esc(format)}</span>`)
+    .join("");
+  const steps = page.steps
+    .map((step, index) => `<li><span>0${index + 1}</span>${esc(step)}</li>`)
+    .join("");
+  return `<div class="platform-board board-${key}">
+    <div class="board-top"><span class="board-network">${social(key)} ${esc(platforms[key].name)}</span><span class="board-label">GUIA DE CRIAÇÃO</span></div>
+    <div class="board-formats">${formats}</div>
+    <div class="board-content"><div class="board-symbol" aria-hidden="true">${icon(key === "x" ? "compass" : key === "facebook" ? "heart" : "play")}</div><p>${esc(page.prompt)}</p></div>
+    <ol class="board-steps">${steps}</ol>
+    <span class="board-caption">Ponto de partida editorial · adapte ao seu nicho</span>
+  </div>`;
+}
+function applyPlatformTheme() {
+  const key = state.platform;
+  const page = platformPages[key];
+  document.body.dataset.platform = key;
+  document.title = `${state.view === "trends" ? (page ? platforms[key].name : "Explorar") : pageNames[state.view][0]} · Social Trends`;
+  document.querySelector('meta[name="theme-color"]').content =
+    page?.metaColor || "#7855e7";
+  $("#platform-panel").setAttribute("aria-labelledby", `platform-tab-${key}`);
+  if (state.view === "trends") {
+    $("#page-title").innerHTML =
+      `${esc(page?.title || pageNames.trends[1])}<span>.</span>`;
+    $("#page-description").textContent =
+      page?.description || pageNames.trends[2];
+    $(".eyebrow").textContent = page?.eyebrow || "SEU RADAR DE CONTEÚDO";
+    $("#breadcrumb-current").textContent = page
+      ? `Explorar / ${platforms[key].name}`
+      : "Explorar tendências";
+  }
+  if (!page) {
+    $(".hero-banner").innerHTML = overviewHero;
+    $$(".hero-banner [data-social]").forEach(
+      (el) => (el.innerHTML = social(el.dataset.social)),
+    );
+  } else {
+    $(".hero-banner").innerHTML =
+      `<div class="hero-copy"><span class="hero-badge"><span></span> ${esc(page.focus.toUpperCase())}</span><h2>${page.headline.split("\n").map(esc).join("<br>")}</h2><p>${esc(page.intro)}</p><button id="platform-plan">${icon("calendar")} Criar uma pauta <span>↗</span></button><button class="hero-explore-link" id="explore-now">Explorar referências ${icon("arrow-down")}</button></div>${platformPreview(page, key)}`;
+    $("#platform-plan").onclick = () => {
+      const niche = state.niche === "all" ? "" : ` · ${niches[state.niche]}`;
+      addPlan(page.planTitle + niche, key);
+      setView("planner");
+    };
+  }
+  $("#explore-now").onclick = () => {
+    $(".discovery").scrollIntoView({ behavior: "smooth" });
+    $("#search").focus({ preventScroll: true });
+  };
+  $("#discovery-title").innerHTML =
+    `${page ? `Referências para ${esc(platforms[key].name)}` : "Explorar referências"} <span class="live-label"><span></span> SELEÇÃO</span>`;
+}
 function choosePlatform(key) {
+  if (!Object.hasOwn(platforms, key)) return;
   state.platform = key;
   state.limit = 6;
+  const url = new URL(location.href);
+  if (key === "all") url.searchParams.delete("platform");
+  else url.searchParams.set("platform", key);
+  history.replaceState(null, "", url);
   renderPlatforms();
+  applyPlatformTheme();
   loadFeed();
 }
 function resetFilters() {
@@ -375,6 +542,7 @@ function setView(view) {
   $("#secondary-section").hidden = view === "trends";
   $("#sidebar").classList.remove("open");
   $("#menu-toggle").setAttribute("aria-expanded", "false");
+  applyPlatformTheme();
   renderCurrent();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -542,10 +710,11 @@ $("#niche").innerHTML = Object.entries(niches)
   .map(([k, n]) => `<option value="${k}">${n}</option>`)
   .join("");
 renderPlatforms();
+applyPlatformTheme();
 renderChips();
 syncSaved();
 $("#platform-tabs").onclick = (e) => {
-  const b = e.target.closest("[data-platform]");
+  const b = e.target.closest(".platform-tab[data-platform]");
   if (b) choosePlatform(b.dataset.platform);
 };
 $("#platform-tabs").onkeydown = (e) => {
@@ -560,7 +729,7 @@ $("#platform-tabs").onkeydown = (e) => {
           ? keys.length - 1
           : (i + (e.key === "ArrowRight" ? 1 : -1) + keys.length) % keys.length;
     choosePlatform(keys[i]);
-    $(`[data-platform="${keys[i]}"]`).focus();
+    $(`.platform-tab[data-platform="${keys[i]}"]`).focus();
   }
 };
 $("#niche-chips").onclick = (e) => {
@@ -608,10 +777,6 @@ document.addEventListener("click", (e) => {
     $("#menu-toggle").setAttribute("aria-expanded", "false");
   }
 });
-$("#explore-now").onclick = () => {
-  $(".discovery").scrollIntoView({ behavior: "smooth" });
-  $("#search").focus({ preventScroll: true });
-};
 $("#inspiration").onclick = () => {
   const items = getFiltered();
   if (!items.length) {
