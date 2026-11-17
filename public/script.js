@@ -295,6 +295,9 @@ function toggleSave(item) {
   persist("socialtrends:saved", saved);
   syncSaved();
   renderCurrent();
+  motion.feedback(
+    [...$$(".save-button")].find((button) => button.dataset.save === item.id),
+  );
   toast(
     found ? "Conteúdo removido da coleção." : "Conteúdo salvo na sua coleção.",
   );
@@ -347,6 +350,11 @@ function getFiltered() {
     .sort((a, b) => (b[state.sort] || 0) - (a[state.sort] || 0));
 }
 function renderGrid() {
+  const previousIds = new Set(
+    [...$("#content-grid").querySelectorAll(".content-card")].map(
+      (card) => card.dataset.id,
+    ),
+  );
   const items = getFiltered();
   const label =
     state.platform === "all"
@@ -370,6 +378,7 @@ function renderGrid() {
       ? "Uma seleção para despertar suas próximas ideias."
       : `Explore conteúdos de ${platforms[state.platform].name} no seu nicho.`;
   bindCards($("#content-grid"));
+  if (!state.loading) motion.cards($("#content-grid"), previousIds);
 }
 function empty(title, description, action, view) {
   return `<div class="empty-state">${icon("compass")}<h3>${esc(title)}</h3><p>${esc(description)}</p>${action ? `<button class="secondary-button" data-action="${view}">${esc(action)}</button>` : ""}</div>`;
@@ -498,23 +507,29 @@ function applyPlatformTheme() {
     };
   }
   $("#explore-now").onclick = () => {
-    $(".discovery").scrollIntoView({ behavior: "smooth" });
+    $(".discovery").scrollIntoView({ behavior: motion.scrollBehavior() });
     $("#search").focus({ preventScroll: true });
   };
   $("#discovery-title").innerHTML =
     `${page ? `Referências para ${esc(platforms[key].name)}` : "Explorar referências"} <span class="live-label"><span></span> SELEÇÃO</span>`;
 }
 function choosePlatform(key) {
-  if (!Object.hasOwn(platforms, key)) return;
+  if (!Object.hasOwn(platforms, key) || key === state.platform) return;
+  const restoreTabFocus = document.activeElement?.matches(".platform-tab");
   state.platform = key;
+  ++requestNumber; // Invalidate an earlier fetch while a theme snapshot is pending.
   state.limit = 6;
   const url = new URL(location.href);
   if (key === "all") url.searchParams.delete("platform");
   else url.searchParams.set("platform", key);
   history.replaceState(null, "", url);
-  renderPlatforms();
-  applyPlatformTheme();
-  loadFeed();
+  motion.themeChange(() => {
+    renderPlatforms();
+    applyPlatformTheme();
+    if (restoreTabFocus)
+      $(`.platform-tab[data-platform="${key}"]`).focus({ preventScroll: true });
+    loadFeed();
+  });
 }
 function resetFilters() {
   state.query = "";
@@ -528,6 +543,7 @@ function resetFilters() {
 }
 function setView(view) {
   if (!pageNames[view]) return;
+  motion.settleTheme();
   state.view = view;
   const [name, title, description] = pageNames[view];
   $("#breadcrumb-current").textContent = name;
@@ -544,7 +560,10 @@ function setView(view) {
   $("#menu-toggle").setAttribute("aria-expanded", "false");
   applyPlatformTheme();
   renderCurrent();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  motion.section(
+    view === "trends" ? $("#platform-panel") : $("#secondary-section"),
+  );
+  window.scrollTo({ top: 0, behavior: motion.scrollBehavior() });
 }
 function renderCurrent() {
   if (state.view === "trends") renderGrid();
@@ -559,7 +578,14 @@ function renderCurrent() {
 function showModal(html) {
   $("#dialog-content").innerHTML = html;
   hydrateIcons($("#detail-dialog"));
-  if (!$("#detail-dialog").open) $("#detail-dialog").showModal();
+  if (!$("#detail-dialog").open) {
+    $("#detail-dialog").showModal();
+    motion.appear($("#detail-dialog"), {
+      duration: 240,
+      distance: 10,
+      scale: 0.98,
+    });
+  }
 }
 function showDetail(item) {
   if (!item) return;
@@ -816,3 +842,4 @@ document.addEventListener("keydown", (e) => {
   }
 });
 loadFeed();
+motion.start();

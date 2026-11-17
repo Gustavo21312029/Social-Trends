@@ -11,6 +11,7 @@ Radar responsivo de referências por rede social e nicho. HTML, CSS e JavaScript
 - Detalhes dos conteúdos, salvos persistidos em localStorage e planejador de pautas com data.
 - Ideias editoriais e mapa demonstrativo de horários.
 - Navegação por teclado, diálogos acessíveis e layout responsivo.
+- Transições suaves entre temas, entradas de cartões ao rolar e animações leves de interação, respeitando a preferência de movimento reduzido.
 
 ## Dados e limites
 
@@ -55,3 +56,9 @@ Fotografias ilustrativas do Unsplash, armazenadas localmente em `public/assets/`
 ## Próximas melhorias para criadores
 
 As propostas priorizadas de roteiros, produção, calendário, coleções e acompanhamento manual estão em [Melhorias para criadores](docs/MELHORIAS-PARA-CRIADORES.md). Os novos temas são apenas uma mudança de apresentação e de atalhos de criação: não adicionam coletores pagos nem novas fontes de métricas.
+
+## Movimento e transições
+
+`public/motion.js` e `public/motion.css` acrescentam animações sem bibliotecas externas. A troca de plataforma usa View Transitions quando disponíveis; nos demais navegadores, usa transições de cores e uma entrada suave do cabeçalho. Novos cartões entram ao aparecer na tela, sem repetir a animação dos resultados existentes ao salvar ou paginar. Menus, botões e diálogos também têm respostas visuais leves.
+
+Com `prefers-reduced-motion: reduce`, as animações, a flutuação decorativa e a rolagem suave são desativadas. Trocas rápidas de plataforma preservam a última seleção e não aceitam respostas antigas de outra rede.
