@@ -1,0 +1,211 @@
+/* Motion stays on opacity and transforms wherever possible. */
+:root {
+  --motion-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.motion-ready,
+.motion-ready
+  :is(
+    .sidebar,
+    .topbar,
+    .content-card,
+    .panel,
+    .idea-card,
+    .plan-row,
+    .platform-tab,
+    .workspace,
+    .tip-card,
+    .nav-item,
+    .search-field,
+    .select-field,
+    .secondary-button,
+    .card-category,
+    .board-formats > span
+  ) {
+  transition-property:
+    background-color, border-color, color, box-shadow, transform;
+  transition-duration: 380ms, 300ms, 250ms, 220ms, 220ms;
+  transition-timing-function: var(--motion-ease);
+}
+.motion-ready
+  :is(
+    .primary-button,
+    .hero-copy button,
+    .save-button,
+    .chip,
+    .help-button,
+    .close-dialog,
+    .avatar-button
+  ) {
+  transition:
+    transform 180ms var(--motion-ease),
+    box-shadow 200ms ease,
+    background-color 250ms ease,
+    color 250ms ease;
+}
+.motion-ready :is(input, select, .card-title-button) {
+  transition:
+    color 250ms ease,
+    border-color 180ms ease;
+}
+/* Let the native snapshot capture the final theme, rather than an intermediate color. */
+.theme-snapshot .motion-ready,
+.theme-snapshot .motion-ready * {
+  transition: none !important;
+}
+html:not(.theme-snapshot) .hero-banner {
+  transition: border-color 300ms ease;
+}
+@media (hover: hover) {
+  .motion-ready
+    :is(
+      .primary-button,
+      .hero-copy button:not(.hero-explore-link),
+      .secondary-button
+    ):hover {
+    transform: translateY(-2px);
+  }
+  .motion-ready .platform-tab:hover {
+    transform: translateY(-2px);
+  }
+  .motion-ready :is(.save-button, .avatar-button):hover {
+    transform: scale(1.07);
+  }
+  .motion-ready .nav-item:hover {
+    transform: translateX(3px);
+  }
+}
+.motion-ready
+  :is(
+    .primary-button,
+    .secondary-button,
+    .platform-tab,
+    .save-button,
+    .chip,
+    .hero-copy button,
+    .avatar-button
+  ):active {
+  transform: scale(0.97);
+}
+.motion-ready .save-button:active {
+  transform: scale(0.9);
+}
+/* A gentle idle motion belongs only to the overview's decorative social icons. */
+.motion-ready .floating-platform {
+  animation: social-float 7s ease-in-out infinite;
+}
+.motion-ready .float-tiktok {
+  animation-delay: -2s;
+}
+.motion-ready .float-youtube {
+  animation-delay: -4s;
+}
+.motion-ready .float-facebook {
+  animation-delay: -1s;
+}
+.motion-ready .float-x {
+  animation-delay: -3s;
+}
+@keyframes social-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+dialog[open]::backdrop {
+  animation: veil-in 180ms ease-out;
+}
+@keyframes veil-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 760px) {
+  .motion-ready .sidebar {
+    transition:
+      transform 320ms var(--motion-ease),
+      background-color 380ms ease,
+      border-color 300ms ease;
+  }
+}
+/* Platform changes use a crossfade plus a small, separate hero entrance. */
+@supports (view-transition-name: platform-hero) {
+  .hero-banner {
+    view-transition-name: platform-hero;
+  }
+  .page-heading {
+    view-transition-name: platform-heading;
+  }
+  ::view-transition {
+    pointer-events: none;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 380ms;
+    animation-timing-function: var(--motion-ease);
+  }
+  ::view-transition-old(root) {
+    animation: theme-out 300ms ease-out both;
+  }
+  ::view-transition-new(root) {
+    animation: theme-in 380ms ease-out both;
+  }
+  ::view-transition-old(platform-hero),
+  ::view-transition-old(platform-heading) {
+    animation: theme-out 180ms ease-out both;
+  }
+  ::view-transition-new(platform-hero) {
+    animation: theme-hero-in 400ms var(--motion-ease) both;
+  }
+  ::view-transition-new(platform-heading) {
+    animation: theme-heading-in 320ms var(--motion-ease) both;
+  }
+}
+@keyframes theme-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes theme-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes theme-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes theme-heading-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
